@@ -1,0 +1,1 @@
+web: gunicorn Govern.wsgi --log-file -
