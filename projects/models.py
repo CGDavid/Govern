@@ -35,6 +35,9 @@ class Valoracio(models.Model):
     objectiu = models.ForeignKey(Objectiu, on_delete=models.CASCADE, null=True)
     puntuacio = models.FloatField()
     comentari = models.TextField()
+    
+    def__unicode__(self):
+    return "%s %s: %s" % (self.projecte, self.objectiu, self.puntuacio)
 
 
 class Metrica(models.Model):
