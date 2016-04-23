@@ -11,6 +11,7 @@ class Objectiu(models.Model):
     
     def __unicode__(self):
         return "%s %s" % (self.nom, self.descripcio)
+        
 
 class Projecte(models.Model):
     STATES = (
@@ -27,6 +28,7 @@ class Projecte(models.Model):
     
     def __unicode__(self):
         return "%s %s" % (self.nom, self.estat)
+        
 
 class Valoracio(models.Model):
     projecte = models.ForeignKey(Projecte, on_delete=models.CASCADE)
