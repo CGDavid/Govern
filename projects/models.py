@@ -30,7 +30,7 @@ class Projecte(models.Model):
 
 class Valoracio(models.Model):
     projecte = models.ForeignKey(Projecte, on_delete=models.CASCADE)
-    objectiu = models.ForeignKey(Objectiu, on_delete=models.CASCADE)
+    objectiu = models.ForeignKey(Objectiu, on_delete=models.CASCADE, null=True)
     puntuacio = models.FloatField()
     comentari = models.TextField()
 
