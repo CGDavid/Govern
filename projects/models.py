@@ -1,7 +1,7 @@
 #! -- encoding: utf-8
 
 from __future__ import unicode_literals
-
+from django.core.validators import MaxValueValidator
 from django.db import models
 
 
@@ -36,8 +36,8 @@ class Valoracio(models.Model):
     puntuacio = models.FloatField()
     comentari = models.TextField()
     
-    def__unicode__(self):
-    return "%s %s: %s" % (self.projecte, self.objectiu, self.puntuacio)
+    def __unicode__(self):
+        return "%s %s: %s" % (self.projecte, self.objectiu, self.puntuacio)
 
 
 class Metrica(models.Model):
@@ -53,3 +53,22 @@ class Metrica(models.Model):
     
     def __unicode__(self):
         return "%s %s" % (self.nom, self.descripcio)
+
+
+class Principi(models.Model):
+    nom = models.CharField(max_length=30)
+    valoracio = models.PositiveSmallIntegerField(validators=[MaxValueValidator(10)])
+    projecte = models.ManyToManyField(Projecte, through='Historial')
+    
+    def __unicode__(self):
+        return "%s" % (self.nom)
+
+
+class Historial(models.Model):
+    projecte = models.ForeignKey(Projecte, on_delete=models.CASCADE)
+    principi = models.ForeignKey(Principi, on_delete=models.CASCADE, null=True)
+    darrera_valoracio = models.PositiveSmallIntegerField(validators=[MaxValueValidator(10)])
+    
+    def __unicode__(self):
+        return "%s %s: %s" % (self.projecte, self.objectiu, self.darrera_valoracio)
+
