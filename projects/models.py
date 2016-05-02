@@ -48,7 +48,7 @@ class Metrica(models.Model):
     )
     nom = models.CharField(max_length=30)
     descripcio = models.TextField()
-    unitat = models.CharField(max_length=2, choices=UNITATS)
+    unitat = models.CharField(max_length=11, choices=UNITATS)
     objectiu = models.ForeignKey(Objectiu, related_name="metriques_objectius")
     
     def __unicode__(self):
