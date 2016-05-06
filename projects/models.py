@@ -3,6 +3,7 @@
 from __future__ import unicode_literals
 from django.core.validators import MaxValueValidator
 from django.db import models
+from datetime import datetime
 
 
 class Objectiu(models.Model):
@@ -25,6 +26,8 @@ class Projecte(models.Model):
     presupost = models.FloatField()
     estat = models.CharField(max_length=2, choices=STATES)
     objectiu = models.ManyToManyField(Objectiu, through='Valoracio')
+    creat = models.DateTimeField(auto_now_add=True, blank=True)
+    modificat = models.DateTimeField(auto_now=True, blank=True)
     
     def __unicode__(self):
         return "%s %s" % (self.nom, self.estat)
@@ -35,6 +38,8 @@ class Valoracio(models.Model):
     objectiu = models.ForeignKey(Objectiu, on_delete=models.CASCADE, null=True)
     puntuacio = models.FloatField()
     comentari = models.TextField()
+    creat = models.DateTimeField(auto_now_add=True, blank=True)
+    modificat = models.DateTimeField(auto_now=True, blank=True)
     
     def __unicode__(self):
         return "%s %s: %s" % (self.projecte, self.objectiu, self.puntuacio)
@@ -82,9 +87,9 @@ class Evaluacio(models.Model):
     comentari_conformitat = models.TextField()
     comentari_conducta = models.TextField()
     
-    # data de modificacio
-    data_modificacio = models.DateTimeField(auto_now=True)
+    creat = models.DateTimeField(auto_now_add=True, blank=True)
+    modificat = models.DateTimeField(auto_now=True, blank=True)
     
     def __unicode__(self):
-        return "Evaluació del projecte %s. %s" % (self.projecte, self.data_modificacio)
+        return "Evaluació del projecte %s. %s" % (self.projecte, self.modificat)
 
