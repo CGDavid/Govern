@@ -66,7 +66,7 @@ class Principi(models.Model):
 
 class Historial(models.Model):
     projecte = models.ForeignKey(Projecte, on_delete=models.CASCADE)
-    principi = models.ForeignKey(Principi, on_delete=models.CASCADE, null=True)
+    principi = models.ForeignKey(Principi, on_delete=models.CASCADE, null=True) # A cumplir un objetivo!
     darrera_valoracio = models.PositiveSmallIntegerField(validators=[MaxValueValidator(10)])
     
     def __unicode__(self):
