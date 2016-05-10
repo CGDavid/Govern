@@ -30,7 +30,7 @@ class Projecte(models.Model):
     modificat = models.DateTimeField(auto_now=True, null=True)
     
     def __unicode__(self):
-        return "%s %s" % (self.nom, self.estat)
+        return "%s (%s)" % (self.nom, self.get_estat_display())
         
 
 class Valoracio(models.Model):
