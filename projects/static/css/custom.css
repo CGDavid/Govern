@@ -229,6 +229,9 @@ body .container.body .right_col {
 }
 
 /**  ------------------------------------------  **/
+.yellow {
+  color: #FFE135;
+}
 
 .blue {
   color: #3498DB;
@@ -247,6 +250,9 @@ body .container.body .right_col {
 }
 .dark {
   color: #34495E;
+}
+.border-yellow {
+  border-color: #FFE135 !important;
 }
 .border-blue {
   border-color: #3498DB !important;
