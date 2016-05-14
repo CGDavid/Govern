@@ -32,7 +32,7 @@ class Projecte(models.Model):
     presupost = models.FloatField()
     estat = models.CharField(max_length=2, choices=STATES)
     tipus = models.CharField(max_length=2, choices=TYPES, default='CO')
-    objectiu = models.ManyToManyField(Objectiu, through='Valoracio')
+    objectiu = models.ManyToManyField(Objectiu)
     creat = models.DateTimeField(auto_now_add=True, null=True)
     modificat = models.DateTimeField(auto_now=True, null=True)
     data_inici = models.DateTimeField(auto_now_add=True, null=True)
@@ -43,18 +43,6 @@ class Projecte(models.Model):
     def __unicode__(self):
         return "%s (%s) [%s - %s]" % (self.nom, self.get_estat_display(), self.data_inici, self.data_fi)
         
-
-class Valoracio(models.Model):
-    projecte = models.ForeignKey(Projecte, on_delete=models.CASCADE)
-    objectiu = models.ForeignKey(Objectiu, on_delete=models.CASCADE, null=True)
-    puntuacio = models.FloatField()
-    comentari = models.TextField()
-    creat = models.DateTimeField(auto_now_add=True, null=True)
-    modificat = models.DateTimeField(auto_now=True, null=True)
-    
-    def __unicode__(self):
-        return "%s %s: %s" % (self.projecte, self.objectiu, self.puntuacio)
-
 
 class Metrica(models.Model):
     UNITATS = (
