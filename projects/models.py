@@ -21,16 +21,27 @@ class Projecte(models.Model):
         ('RE','Rebutjat'),
         ('FI','Finalitzat'),
     )
+    
+    TYPES = (
+        ('F2P','Free To Play'),
+        ('CO','Convencional'),
+        ('ALT','Altres'),
+    )
     nom = models.CharField(max_length=30)
     descripcio = models.TextField()
     presupost = models.FloatField()
     estat = models.CharField(max_length=2, choices=STATES)
+    tipus = models.CharField(max_length=2, choices=TYPES, default='CO')
     objectiu = models.ManyToManyField(Objectiu, through='Valoracio')
     creat = models.DateTimeField(auto_now_add=True, null=True)
     modificat = models.DateTimeField(auto_now=True, null=True)
+    data_inici = models.DateTimeField(auto_now_add=True, null=True)
+    data_fi = models.DateTimeField(auto_now=True, null=True)
+    maxim = models.PositiveSmallIntegerField(null=True)
+    minim = models.PositiveSmallIntegerField(null=True)
     
     def __unicode__(self):
-        return "%s (%s)" % (self.nom, self.get_estat_display())
+        return "%s (%s) [%s - %s]" % (self.nom, self.get_estat_display(), self.data_inici, self.data_fi)
         
 
 class Valoracio(models.Model):
@@ -55,6 +66,8 @@ class Metrica(models.Model):
     descripcio = models.TextField()
     unitat = models.CharField(max_length=11, choices=UNITATS)
     objectiu = models.ForeignKey(Objectiu, related_name="metriques_objectius")
+    maxim = models.PositiveSmallIntegerField(null=True)
+    minim = models.PositiveSmallIntegerField(null=True)
     
     def __unicode__(self):
         return "%s %s" % (self.nom, self.descripcio)
@@ -90,6 +103,18 @@ class Evaluacio(models.Model):
     creat = models.DateTimeField(auto_now_add=True, null=True)
     modificat = models.DateTimeField(auto_now=True, null=True)
     
+    def _mitjana(self):
+        """
+        Retorna la mitjana de les puntuacions de l'Evaluacio
+        
+        returns: Float
+        """
+        puntuacions = [self.puntuacio_responsabilitat, self.puntuacio_estrategia]
+        puntuacions.extend([self.puntuacio_adquisicio, self.puntuacio_rendiment])
+        puntuacions.extend([self.puntuacio_conformitat, self.puntuacio_conducta])
+        return float(sum(puntuacions))/len(puntuacions)
+    mitjana = property(_mitjana)
+        
     def __unicode__(self):
-        return "Evaluació del projecte %s. %s" % (self.projecte, self.modificat)
+        return "Evaluació del projecte %s: %s. modificat el %s" % (self.projecte, self.mitjana, self.modificat)
 
