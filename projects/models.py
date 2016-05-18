@@ -31,7 +31,7 @@ class Projecte(models.Model):
     descripcio = models.TextField()
     presupost = models.FloatField()
     estat = models.CharField(max_length=2, choices=STATES)
-    tipus = models.CharField(max_length=2, choices=TYPES, default='CO')
+    tipus = models.CharField(max_length=3, choices=TYPES, default='CO')
     objectiu = models.ManyToManyField(Objectiu)
     creat = models.DateTimeField(auto_now_add=True, null=True)
     modificat = models.DateTimeField(auto_now=True, null=True)
