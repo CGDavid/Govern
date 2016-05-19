@@ -29,7 +29,7 @@ class Projecte(models.Model):
     )
     nom = models.CharField(max_length=30)
     descripcio = models.TextField()
-    presupost = models.FloatField()
+    presupost = models.DecimalField(max_digits=7, decimal_places=2)
     estat = models.CharField(max_length=2, choices=STATES)
     tipus = models.CharField(max_length=3, choices=TYPES, default='CO')
     objectiu = models.ManyToManyField(Objectiu)
