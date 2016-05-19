@@ -35,8 +35,8 @@ class Projecte(models.Model):
     objectiu = models.ManyToManyField(Objectiu)
     creat = models.DateTimeField(auto_now_add=True, null=True)
     modificat = models.DateTimeField(auto_now=True, null=True)
-    data_inici = models.DateTimeField(auto_now_add=True, null=True)
-    data_fi = models.DateTimeField(auto_now=True, null=True)
+    data_inici = models.DateTimeField(null=True)
+    data_fi = models.DateTimeField(null=True)
     maxim = models.PositiveSmallIntegerField(null=True)
     minim = models.PositiveSmallIntegerField(null=True)
     
