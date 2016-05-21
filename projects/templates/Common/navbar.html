@@ -1,144 +1,149 @@
 {% load staticfiles %}
 <!DOCTYPE html>
 
-<div class="col-md-3 left_col">
-        <div class="left_col scroll-view">
+    <div class="col-md-3 left_col">
+      <div class="left_col scroll-view">
 
-          <div class="navbar nav_title" style="border: 0;">
-            <a href="/index" class="site_title"><span>Govern de les TIC</span></a>
-          </div>
-          <div class="clearfix"></div>
-
-          <br />
-
-          <!-- sidebar menu -->
-          <div id="sidebar-menu" class="main_menu_side hidden-print main_menu">
-
-            <div class="menu_section">
-              <h3>Menu</h3>
-              <ul class="nav side-menu">
-
-                <li>
-                  <a><i class="fa fa-bullseye"></i> Principis <span class="fa fa-chevron-down"></span></a>
-                  <ul class="nav child_menu" style="display: none">
-                    <li><a href="/principis">Veure tots els principis</a> </li>
-                    <li><a href="/principis/crear">Crear principi</a> </li>
-                  </ul>
-                </li>
-
-                <li>
-                  <a><i class="fa fa-cube"></i> Objectius <span class="fa fa-chevron-down"></span></a>
-                  <ul class="nav child_menu" style="display: none">
-                    <li><a href="/objectius">Veure tots els objectiu</a> </li>
-                    <li><a href="/objectius/crear">Crear objectiu</a> </li>
-                  </ul>
-                </li>
-
-                <li>
-                  <a><i class="fa fa-cube"></i> Projectes <span class="fa fa-chevron-down"> </span> </a>
-                  <ul class="nav child_menu" style="display: none">
-                    <li><a href="/projectes">Veure tots els projectes</a> </li>
-                    <li><a href="/projectes/crear">Crear projecte</a> </li>
-                  </ul>
-                </li>
-
-                <li>
-                  <a href="/grafiques"><i class="fa fa-bar-chart-o"></i> Gràfiques </span></a>
-                </li>
-                
-              </ul>
-            </div>
-          </div>
-          <!-- /sidebar menu -->
+        <div class="navbar nav_title" style="border: 0;">
+          <a href="/index" class="site_title"><span>Govern de les TIC</span></a>
         </div>
-      </div>
+        <div class="clearfix"></div>
 
-      <!-- top navigation -->
-      <div class="top_nav">
+        <br />
 
-        <div class="nav_menu">
-          <nav class="" role="navigation">
-            <div class="nav toggle">
-              <a id="menu_toggle"><i class="fa fa-bars"></i></a>
-            </div>
+        <!-- sidebar menu -->
+        <div id="sidebar-menu" class="main_menu_side hidden-print main_menu">
 
-            <ul class="nav navbar-nav navbar-right">
-              <li role="presentation" class="dropdown">
-                <a href="javascript:;" class="dropdown-toggle info-number" data-toggle="dropdown" aria-expanded="false">
-                  <i class="fa fa-bell-o"></i>
-                  <span class="badge bg-green">6</span>
-                </a>
-                <ul id="menu1" class="dropdown-menu list-unstyled msg_list" role="menu">
-                  <li>
-                    <a>
-                      <span class="image">
-                        <img src="{% static 'images/img.jpg' %}" alt="Profile Image" />
-                      </span>
-                      <span>
-												<span>John Smith</span>
-                      <span class="time">3 mins ago</span>
-                      </span>
-                      <span class="message">
-												Film festivals used to be do-or-die moments for movie makers. They were where...
-											</span>
-                    </a>
-                  </li>
-                  <li>
-                    <a>
-                      <span class="image">
-												<img src="{% static 'images/img.jpg' %}" alt="Profile Image" />
-                      </span>
-                      <span>
-                      	<span>John Smith</span>
-                      <span class="time">3 mins ago</span>
-                      </span>
-                      <span class="message">
-												Film festivals used to be do-or-die moments for movie makers. They were where...
-					            </span>
-                    </a>
-                  </li>
-                  <li>
-                    <a>
-                      <span class="image">
-												<img src="{% static 'images/img.jpg' %}" alt="Profile Image" />
-                      </span>
-                      <span>
-                      	<span>John Smith</span>
-                      <span class="time">3 mins ago</span>
-                      </span>
-                      <span class="message">
-												Film festivals used to be do-or-die moments for movie makers. They were where...
-					            </span>
-                    </a>
-                  </li>
-                  <li>
-                    <a>
-                      <span class="image">
-												<img src="{% static 'images/img.jpg' %}" alt="Profile Image" />
-                      </span>
-                      <span>
-                      	<span>John Smith</span>
-                      <span class="time">3 mins ago</span>
-                      </span>
-                      <span class="message">
-												Film festivals used to be do-or-die moments for movie makers. They were where...
-					            </span>
-                    </a>
-                  </li>
-                  <li>
-                    <div class="text-center">
-                      <a href="inbox.html">
-                        <strong>See All Alerts</strong>
-                        <i class="fa fa-angle-right"></i>
-                      </a>
-                    </div>
-                  </li>
+          <div class="menu_section">
+            <h3>Menu</h3>
+            <ul class="nav side-menu">
+
+              <li>
+                <a><i class="fa fa-bullseye"></i> Principis <span class="fa fa-chevron-down"></span></a>
+                <ul class="nav child_menu" style="display: none">
+                  <li><a href="/principis">Veure tots els principis</a> </li>
+                  <li><a href="/principis/crear">Crear principi</a> </li>
                 </ul>
               </li>
 
-            </ul>
-          </nav>
-        </div>
+              <li>
+                <a><i class="fa fa-cube"></i> Objectius <span class="fa fa-chevron-down"></span></a>
+                <ul class="nav child_menu" style="display: none">
+                  <li><a href="/objectius">Veure tots els objectiu</a> </li>
+                  <li><a href="/objectius/crear">Crear objectiu</a> </li>
+                </ul>
+              </li>
 
+              <li>
+                <a><i class="fa fa-cube"></i> Projectes <span class="fa fa-chevron-down"> </span> </a>
+                <ul class="nav child_menu" style="display: none">
+                  <li><a href="/projectes">Veure tots els projectes</a> </li>
+                  <li><a href="/projectes/crear">Crear projecte</a> </li>
+                </ul>
+              </li>
+
+              <li>
+                <a><i class="fa fa-bar-chart-o"></i> Mètriques <span class="fa fa-chevron-down"> </span> </a>
+                <ul class="nav child_menu" style="display: none">
+                  <li><a href="/metriques">Veure totes les mètriques </a> </li>
+                  <li><a href="/metriques/crear">Crear mètrica</a> </li>
+                </ul>
+              </li>
+              
+            </ul>
+          </div>
+        </div>
+        <!-- /sidebar menu -->
       </div>
-      <!-- /top navigation -->
+    </div>
+
+    <!-- top navigation -->
+    <div class="top_nav">
+
+      <div class="nav_menu">
+        <nav class="" role="navigation">
+          <div class="nav toggle">
+            <a id="menu_toggle"><i class="fa fa-bars"></i></a>
+          </div>
+
+          <ul class="nav navbar-nav navbar-right">
+            <li role="presentation" class="dropdown">
+              <a href="javascript:;" class="dropdown-toggle info-number" data-toggle="dropdown" aria-expanded="false">
+                <i class="fa fa-bell-o"></i>
+                <span class="badge bg-green">6</span>
+              </a>
+              <ul id="menu1" class="dropdown-menu list-unstyled msg_list" role="menu">
+                <li>
+                  <a>
+                    <span class="image">
+                      <img src="{% static 'images/img.jpg' %}" alt="Profile Image" />
+                    </span>
+                    <span>
+											<span>John Smith</span>
+                    <span class="time">3 mins ago</span>
+                    </span>
+                    <span class="message">
+											Film festivals used to be do-or-die moments for movie makers. They were where...
+										</span>
+                  </a>
+                </li>
+                <li>
+                  <a>
+                    <span class="image">
+											<img src="{% static 'images/img.jpg' %}" alt="Profile Image" />
+                    </span>
+                    <span>
+                    	<span>John Smith</span>
+                    <span class="time">3 mins ago</span>
+                    </span>
+                    <span class="message">
+											Film festivals used to be do-or-die moments for movie makers. They were where...
+				            </span>
+                  </a>
+                </li>
+                <li>
+                  <a>
+                    <span class="image">
+											<img src="{% static 'images/img.jpg' %}" alt="Profile Image" />
+                    </span>
+                    <span>
+                    	<span>John Smith</span>
+                    <span class="time">3 mins ago</span>
+                    </span>
+                    <span class="message">
+											Film festivals used to be do-or-die moments for movie makers. They were where...
+				            </span>
+                  </a>
+                </li>
+                <li>
+                  <a>
+                    <span class="image">
+											<img src="{% static 'images/img.jpg' %}" alt="Profile Image" />
+                    </span>
+                    <span>
+                    	<span>John Smith</span>
+                    <span class="time">3 mins ago</span>
+                    </span>
+                    <span class="message">
+											Film festivals used to be do-or-die moments for movie makers. They were where...
+				            </span>
+                  </a>
+                </li>
+                <li>
+                  <div class="text-center">
+                    <a href="inbox.html">
+                      <strong>See All Alerts</strong>
+                      <i class="fa fa-angle-right"></i>
+                    </a>
+                  </div>
+                </li>
+              </ul>
+            </li>
+
+          </ul>
+        </nav>
+      </div>
+
+    </div>
+
+    <!-- /top navigation -->

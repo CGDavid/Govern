@@ -4,6 +4,7 @@
 
 {% include "Common/header.html" %}
 
+
 <body class="nav-md">
 
   <div class="container body">
@@ -15,11 +16,7 @@
 
       <!-- page content -->
       <div class="right_col" role="main">
-        <form action="/objectius/crear" method="post">
-          {% csrf_token %}
-          {{ form }}
-          <input type="submit" value="Submit" />
-        </form>
+
       </div>
       <!-- /page content -->
 
