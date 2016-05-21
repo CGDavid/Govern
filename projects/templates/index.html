@@ -2,7 +2,7 @@
 <!DOCTYPE html>
 <html lang="en">
 
-{% include "header.html" %}
+{% include "Common/header.html" %}
 
 
 <body class="nav-md">
@@ -10,7 +10,7 @@
   <div class="container body">
     <div class="main_container">
 
-      {% include "navbar.html" %}
+      {% include "Common/navbar.html" %}
 
       <!-- page content -->
       <div class="right_col" role="main">
@@ -725,12 +725,7 @@
       <!-- /page content -->
 
       <!-- footer content -->
-      <footer>
-        <div class="pull-right">
-          Gentelella - Bootstrap Admin Template by <a href="https://colorlib.com">Colorlib</a>
-        </div>
-        <div class="clearfix"></div>
-      </footer>
+      {% include "Common/footer.html" %}
       <!-- /footer content -->
     </div>
   </div>

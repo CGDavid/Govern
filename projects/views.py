@@ -11,13 +11,16 @@ def index(request):
     view = {
         'project_list': project_list,
     }
-    
     return render(request, "index.html", view)
 
-def principis(request):
-    project_list = Projecte.objects.order_by('modificat')
-    view = {
-        'project_list': project_list,
-    }
-    
-    return render(request, "principis.html", view)
+def principis(request):    
+    return render(request, "principis.html")
+
+def objectius(request):
+    return render(request, "objectius.html")
+
+def projectes(request):
+    return render(request, "projectes.html")
+
+def grafiques(request):
+    return render(request, "grafiques.html")
