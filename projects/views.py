@@ -7,20 +7,29 @@ from .models import *
 # A continuación 3 posibles variaciones de index. Se accede añadiendo /index2 o /index3 a la url
 
 def index(request):
-    project_list = Projecte.objects.order_by('modificat')
-    view = {
-        'project_list': project_list,
-    }
-    return render(request, "index.html", view)
+    return render(request, "index.html")
 
+# Principis
 def principis(request):    
-    return render(request, "principis.html")
+    return render(request, "Principis/principis.html")
 
+def crearPrincipi(request):    
+    return render(request, "Principis/crear.html")
+
+# Objectius
 def objectius(request):
-    return render(request, "objectius.html")
+    return render(request, "Objectius/objectius.html")
 
+def crearObjectiu(request):    
+    return render(request, "Objectius/crear.html")
+
+# Projectes
 def projectes(request):
-    return render(request, "projectes.html")
+    return render(request, "Projectes/projectes.html")
 
+def crearProjecte(request):    
+    return render(request, "Projectes/crear.html")
+
+# Gràfiques
 def grafiques(request):
-    return render(request, "grafiques.html")
+    return render(request, "Grafiques/grafiques.html")

@@ -5,7 +5,7 @@
         <div class="left_col scroll-view">
 
           <div class="navbar nav_title" style="border: 0;">
-            <a href="index.html" class="site_title"><span>Govern de les TIC</span></a>
+            <a href="/index" class="site_title"><span>Govern de les TIC</span></a>
           </div>
           <div class="clearfix"></div>
 
@@ -17,19 +17,35 @@
             <div class="menu_section">
               <h3>Menu</h3>
               <ul class="nav side-menu">
-                <li><a href="principis"><i class="fa fa-star"></i> Principis </a></li>
-                <li><a href="objectius"><i class="fa fa-bullseye"></i> Objectius </span></a></li>
-                <li><a href="projectes"><i class="fa fa-cube"></i> Projectes <span class="fa fa-chevron-down"></span></a>
+
+                <li>
+                  <a><i class="fa fa-bullseye"></i> Principis <span class="fa fa-chevron-down"></span></a>
                   <ul class="nav child_menu" style="display: none">
-                  {% for project in project_list %}
-                    <li><a href="form.html">{{ project.nom }}</a>
-                    </li>
-                  {% endfor %}
+                    <li><a href="/principis">Veure tots els principis</a> </li>
+                    <li><a href="/principis/crear">Crear principi</a> </li>
                   </ul>
                 </li>
-                <li><a href="grafiques"><i class="fa fa-bar-chart-o"></i> Gràfiques </span></a></li>
+
+                <li>
+                  <a><i class="fa fa-cube"></i> Objectius <span class="fa fa-chevron-down"></span></a>
+                  <ul class="nav child_menu" style="display: none">
+                    <li><a href="/objectius">Veure tots els objectiu</a> </li>
+                    <li><a href="/objectius/crear">Crear objectiu</a> </li>
                   </ul>
                 </li>
+
+                <li>
+                  <a><i class="fa fa-cube"></i> Projectes <span class="fa fa-chevron-down"> </span> </a>
+                  <ul class="nav child_menu" style="display: none">
+                    <li><a href="/projectes">Veure tots els projectes</a> </li>
+                    <li><a href="/projectes/crear">Crear projecte</a> </li>
+                  </ul>
+                </li>
+
+                <li>
+                  <a href="/grafiques"><i class="fa fa-bar-chart-o"></i> Gràfiques </span></a>
+                </li>
+                
               </ul>
             </div>
           </div>
