@@ -16,7 +16,11 @@
 
       <!-- page content -->
       <div class="right_col" role="main">
-
+        <form action="/projectes/crear" method="post">
+          {% csrf_token %}
+          {{ form }}
+          <input type="submit" value="Submit" />
+        </form>
       </div>
       <!-- /page content -->
 
@@ -29,6 +33,17 @@
   <script src="{% static 'js/bootstrap.min.js' %}"></script>
   <script src="{% static 'js/custom.js' %}"></script>
 
+  <!-- Datepicker -->
+  <link rel="stylesheet" href="http://code.jquery.com/ui/1.11.0/themes/smoothness/jquery-ui.css"> 
+  <script src="http://code.jquery.com/jquery-1.9.1.js"></script>
+  <script src="http://code.jquery.com/ui/1.11.0/jquery-ui.js"></script>
+  <script>
+    $(document).ready(function() {
+        $('.datepicker').datepicker();
+    });
+  </script>
+  <!-- /Datepicker -->
+  
 </body>
 
 </html>
