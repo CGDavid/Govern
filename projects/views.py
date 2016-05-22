@@ -39,7 +39,10 @@ def crearObjectiu(request):
 		form = ObjectiuForm(request.POST)
 		if form.is_valid():
 			# Si el formulari és vàlid, cream el objectiu
-
+			nom = form.cleaned_data['objectiu']
+			descripcio = form.cleaned_data['descripcio']
+			o = Objectiu(nom=nom, descripcio=descripcio)
+			o.save()
 			return render(request, 'index.html')
 	# Request de view de formulari
 	else:
@@ -61,7 +64,7 @@ def crearProjecte(request):
 	# Request de view de formulari
 	else:
 		form = PrincipiForm()
-	return render(request, 'Projectes/crear.html')
+	return render(request, 'Projectes/crear.html', {'form': form})
 
 # Mètriques
 def metriques(request):
@@ -70,12 +73,19 @@ def metriques(request):
 def crearMetrica(request):
 	# Dades enviades desde el form
 	if request.method == 'POST':
-		form = PrincipiForm(request.POST)
+		form = MetricaForm(request.POST)
 		if form.is_valid():
 			# Si el formulari és vàlid, cream el objectiu
-			
+			nom = form.cleaned_data['metrica']
+			descripcio = form.cleaned_data['descripcio']
+			unitat = form.cleaned_data['unitat']
+			maxim = form.cleaned_data['vMax']
+			minim = form.cleaned_data['vMin']
+			objectiu_id = request.POST['objectiu']
+			m = Metrica(nom=nom, descripcio=descripcio, maxim=maxim, minim=minim, objectiu_id=objectiu_id)
+			m.save()
 			return render(request, 'index.html')
 	# Request de view de formulari
 	else:
-		form = PrincipiForm() 
-	return render(request, 'Metriques/crear.html')
+		form = MetricaForm() 
+	return render(request, 'Metriques/crear.html', {'form': form})
