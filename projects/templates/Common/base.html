@@ -1,0 +1,39 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html lang="en">
+
+{% include "Common/header.html" %}
+
+
+<body class="nav-md">
+
+  <div class="container body">
+    <div class="main_container">
+
+      <!-- navbar content -->
+      {% include "Common/navbar.html" %}
+      <!-- /navbar content -->
+
+      <!-- page content -->
+      <div class="right_col" role="main">
+        {% block content %}
+          <!-- inherance of Content -->
+        {% endblock %}
+      </div>
+      <!-- /page content -->
+
+      <!-- footer content -->
+      {% include "Common/footer.html" %}
+      <!-- /footer content -->
+    </div>
+  </div>
+
+  <script src="{% static 'js/bootstrap.min.js' %}"></script>
+  <script src="{% static 'js/custom.js' %}"></script>
+  {% block scripts %}
+    <!-- Inherance of scripts -->
+  {% endblock %}
+</body>
+
+</html>
+
