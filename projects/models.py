@@ -32,7 +32,7 @@ class Projecte(models.Model):
     presupost = models.FloatField()
     estat = models.CharField(max_length=2, choices=STATES)
     tipus = models.CharField(max_length=3, choices=TYPES, default='CO')
-    objectiu = models.ManyToManyField(Objectiu)
+    objectiu = models.ManyToManyField(Objectiu, related_name="projectes_objectius")
     creat = models.DateTimeField(auto_now_add=True, null=True)
     modificat = models.DateTimeField(auto_now=True, null=True)
     data_inici = models.DateTimeField(null=True)

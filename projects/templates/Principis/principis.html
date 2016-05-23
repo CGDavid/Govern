@@ -1,5 +1,64 @@
 {% extends "Common/base.html" %}
 
 {% block content %}
+	<div class="row">
+	  <div class="col-md-12">
+	    <div class="x_panel">
+	      <div class="x_title">
+	        <h2>Principis</h2>
+	        <div class="clearfix"></div>
+	      </div>
 
+	      <div class="x_content">
+
+	        <p>Llistat de principis de l'organització</p>
+
+	        <!-- start project list -->
+	        <table class="table table-striped projects">
+	          <thead>
+	            <tr>
+	              <th style="width: 1%">ID</th>
+	              <th style="width: 20%">Principi</th>
+	              <th style="width: 20%">Objectius</th>
+	            </tr>
+	          </thead>
+	          <tbody>
+
+	          	{% for principi in principis %}
+
+		            <tr>
+		            	<!-- Id del principi -->
+		              <td>
+		              	{{ principi.id }}
+		              </td>
+	              	
+	              	<!-- Nom -->
+		              <td>
+		                {{ principi.nom }}
+		              </td>
+
+		              <!-- Objectius -->
+		              <td>
+		              	{% for objectiu in principi.objectiu.all %}
+		              		{{ objectiu.nom }}
+		              		<br>
+	            			{% endfor %}
+		              </td>
+
+		              <!-- Opcions -->
+		              <td>
+		                <a href="#" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i> Edita </a>
+		                <a href="/principis/elimina/{{ principi.id }}" class="btn btn-danger btn-xs"><i class="fa fa-trash-o"></i> Esborra </a>
+		              </td>
+		            </tr>
+
+	            {% endfor %}
+
+	          </tbody>
+	        </table>
+	        <!-- end project list -->
+	      </div>
+	    </div>
+	  </div>
+	</div>
 {% endblock %}

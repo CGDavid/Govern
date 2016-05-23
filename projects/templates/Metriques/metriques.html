@@ -1,5 +1,84 @@
 {% extends "Common/base.html" %}
 
 {% block content %}
+	<div class="row">
+	  <div class="col-md-12">
+	    <div class="x_panel">
+	      <div class="x_title">
+	        <h2>Mètriques</h2>
+	        <div class="clearfix"></div>
+	      </div>
 
+	      <div class="x_content">
+
+	        <p>Llistat de mètriques de l'organització</p>
+
+	        <table class="table table-striped projects">
+	          <thead>
+	            <tr>
+	              <th style="width: 1%">ID</th>
+	              <th style="width: 20%">Mètrica</th>
+	              <th style="width: 20%">Descripció</th>
+	              <th style="width: 20%">Unitat</th>
+	              <th style="width: 20%">Màxim</th>
+	              <th style="width: 20%">Mínim</th>
+	              <th style="width: 20%">Objectiu</th>
+	            </tr>
+	          </thead>
+	          <tbody>
+
+	          	{% for metrica in metriques %}
+
+		            <tr>
+		            	<!-- Id de la mètrica -->
+		              <td>
+		              	{{ metrica.id }}
+		              </td>
+	              	
+	              	<!-- Nom -->
+		              <td>
+		                {{ metrica.nom }}
+		              </td>	
+
+		              <!-- Descripció -->
+		              <td>
+		                {{ metrica.descripcio }}
+		              </td>
+
+		              <!-- Unitat -->
+		              <td>
+		                {{ metrica.unitat }}
+		              </td>
+
+		              <!-- Màxim -->
+		              <td>
+		                {{ metrica.maxim }}
+		              </td>
+
+		              <!-- Mínim -->
+		              <td>
+		                {{ metrica.minim }}
+		              </td>
+
+		              <!-- Objectiu -->
+		              <td>
+		                {{ metrica.objectiu_id }}
+		              </td>
+
+		              <!-- Opcions -->
+		              <td>
+		                <a href="#" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i> Edita </a>
+		                <a href="/metriques/elimina/{{ metrica.id }}" class="btn btn-danger btn-xs"><i class="fa fa-trash-o"></i> Esborra </a>
+		              </td>
+		            </tr>
+
+	            {% endfor %}
+
+	          </tbody>
+	        </table>
+	        <!-- end project list -->
+	      </div>
+	    </div>
+	  </div>
+	</div>
 {% endblock %}

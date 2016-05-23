@@ -76,7 +76,7 @@ class Migration(migrations.Migration):
                 ('data_fi', models.DateTimeField(auto_now=True, null=True)),
                 ('maxim', models.PositiveSmallIntegerField(null=True)),
                 ('minim', models.PositiveSmallIntegerField(null=True)),
-                ('objectiu', models.ManyToManyField(to='projects.Objectiu')),
+                ('objectiu', models.ManyToManyField(related_name='projectes_objectius', to='projects.Objectiu')),
             ],
         ),
         migrations.AddField(

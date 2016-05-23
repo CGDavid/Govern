@@ -24,6 +24,7 @@ class PrincipiForm(forms.Form):
 class ObjectiuForm(forms.Form):
 	objectiu = forms.CharField(max_length=100)
 	descripcio = forms.CharField(widget=forms.Textarea)
+	principis = forms.ModelMultipleChoiceField(queryset=Principi.objects.all())
 
 class ProjecteForm(forms.Form):
 	projecte = forms.CharField(max_length=100)
@@ -35,6 +36,7 @@ class ProjecteForm(forms.Form):
 		widget=forms.Select, choices=TIPUS)
 	data_inici = forms.DateField(widget=DateInput())
 	data_fi = forms.DateField(widget=DateInput())
+	objectius = forms.ModelMultipleChoiceField(queryset=Objectiu.objects.all())
 	vMin = forms.IntegerField()
 	vMax = forms.IntegerField()
 
@@ -44,4 +46,4 @@ class MetricaForm(forms.Form):
 	unitat = forms.CharField(max_length=100)
 	vMin = forms.IntegerField()
 	vMax = forms.IntegerField()
-	objectiu = forms.ModelChoiceField(queryset=Objectiu.objects.exclude(), empty_label=None)
+	objectiu = forms.ModelChoiceField(queryset=Objectiu.objects.all(), empty_label=None)

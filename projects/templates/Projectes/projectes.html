@@ -1,5 +1,115 @@
 {% extends "Common/base.html" %}
 
 {% block content %}
+<div class="row">
+	  <div class="col-md-12">
+	    <div class="x_panel">
+	      <div class="x_title">
+	        <h2>Projectes</h2>
+	        <div class="clearfix"></div>
+	      </div>
 
+	      <div class="x_content">
+
+	        <p>Llistat de projectes de l'organització</p>
+
+	        <!-- start project list -->
+	        <table class="table table-striped projects">
+	          <thead>
+	            <tr>
+	              <th style="width: 1%">ID</th>
+	              <th style="width: 20%">Nom del projecte</th>
+	              <th>Data Inici</th>
+	              <th>Data Fi</th>
+	              <th>Descripció</th>
+	              <th>Pressupost</th>
+	              <th>Estat</th>
+	              <th>Tipus</th>
+	              <th>Objectius </th>
+	              <th style="width: 20%">Opcions</th>
+	            </tr>
+	          </thead>
+	          <tbody>
+
+	          	{% for projecte in projectes %}
+
+		            <tr>
+		            	<!-- Id del projecte -->
+		              <td>
+		              	{{ projecte.id }}
+		              </td>
+	              	
+	              	<!-- Nom -->
+		              <td>
+		              	{{ projecte.nom }}
+		              </td>
+
+	                <!-- Data Inici -->
+		              <td>
+		              	{{ projecte.data_inici }}
+		              </td>
+		              
+	                <!-- Data Fi -->
+		              <td>
+		              	{{ projecte.data_fi }}
+		              </td>
+
+		              <!-- Descripció -->
+		              <td>
+		              	{{ projecte.descripcio }}
+		              </td>
+
+		              <!-- Pressupost -->
+		              <td>
+		              	{{ projecte.presupost }} €
+		              </td>
+		              <!-- Estat -->
+		              <td>
+										{% if projecte.estat == 'PE' %}
+		                	<a class="btn btn-success btn-xs"></i> Pendent </a>
+										{% elif projecte.estat == 'PR'%}
+		                	<a class="btn btn-warning btn-xs"></i> En progrés </a>
+										{% elif projecte.estat == 'RE'%}
+		                	<a class="btn btn-danger btn-xs"></i> Rebutjat </a>
+										{% elif projecte.estat == 'FI'%}
+		                	<a class="btn btn-info btn-xs"></i> Finalitzat </a>
+										{% endif %}
+		              </td>
+
+		              <!-- Tipus -->
+		              <td>
+		              	{% if projecte.tipus == 'F2P' %}
+		              		Free to play
+										{% elif projecte.tipus == 'CO'%}
+											Convencional
+										{% elif projecte.tipus == 'ALT'%}
+											Altres
+										{% endif %}
+		              </td>
+
+		              <!-- Objectius -->
+		              <td>
+		              	{% for objectiu in projecte.objectiu.all %}
+		          				{{ objectiu.nom }}
+		          			{% endfor %}
+		              </td>
+
+		              <!-- Opcions -->
+		              <td>
+		                <a href="#" class="btn btn-primary btn-xs"><i class="fa fa-folder"></i> Visualitza </a>
+		                <a href="#" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i> Edita </a>
+		                <a href="/projectes/elimina/{{ projecte.id }}" class="btn btn-danger btn-xs"><i class="fa fa-trash-o"></i> Esborra </a>
+		              </td>
+		            </tr>
+
+		          {% endfor %}
+
+	          </tbody>
+	        </table>
+	        <!-- end project list -->
+
+	      </div>
+	    </div>
+	  </div>
+	</div>
 {% endblock %}
