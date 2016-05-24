@@ -3,4 +3,3 @@ venv
 staticfiles
 *.sqlite3
 *.swp
-settings.py

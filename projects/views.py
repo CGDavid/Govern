@@ -27,17 +27,33 @@ def crearPrincipi(request):
 			nom = form.cleaned_data['principi']
 			p = Principi(nom=nom)
 			p.save()
-			return render(request, 'index.html')
+			return render(request, 'Principis/principis.html')
 	else:
 		form = PrincipiForm()
 	return render(request, 'Principis/crear.html', {'form': form})
 
+# Elimina el principi corresponent a la id
 def eliminaPrincipi(request, id):
 	principi = Principi.objects.filter(id=id)
 	principi.delete()
 	principis = Principi.objects.all()
 	return render(request, "Principis/principis.html", {'principis': principis})
 
+# Edició del principi correponent a la id
+def editaPrincipi(request, id):
+	principi = Principi.objects.filter(id=id).values('nom')[0]
+	form = PrincipiForm(initial={'principi': principi.get('nom'), 'id_principi':id })
+	return render(request, 'Principis/editar.html', {'form': form})
+
+def updatePrincipi(request):
+	form = PrincipiForm(request.POST)
+	if form.is_valid():
+		principi_id = form.cleaned_data['id']
+		principi = Principi.objects.filter(id=principi_id)
+		principi.nom = form.cleaned_data['nom']
+		principi.save()
+		principis = Principi.objects.all()
+	return render(request, "Principis/principis.html", {'principis': principis})
 
 # Objectius
 
@@ -63,7 +79,7 @@ def crearObjectiu(request):
 				o.principis_objectius.add(principi)
 			# Guardam l'objectiu
 			o.save()
-			return render(request, 'index.html')
+			return render(request, 'Objectius/objectius.html')
 	else:
 		form = ObjectiuForm()
 	return render(request, 'Objectius/crear.html', {'form': form})
@@ -73,6 +89,9 @@ def eliminaObjectiu(request, id):
 	objectiu.delete()
 	objectius = Objectiu.objects.all()
 	return render(request, "Objectius/objectius.html", {'objectius': objectius})
+
+def editaObjectiu(request, id):
+	return 'holi'
 
 
 # Projectes
@@ -108,7 +127,7 @@ def crearProjecte(request):
 				p.objectiu.add(objectiu)
 			# Guardam el projecte
 			p.save()
-			return render(request, 'index.html')
+			return render(request, 'Projectes/projectes.html')
 	else:
 		form = ProjecteForm()
 	return render(request, 'Projectes/crear.html', {'form': form})
@@ -119,13 +138,17 @@ def eliminaProjecte(request, id):
 	projectes = Projecte.objects.all()
 	return render(request, "Projectes/projectes.html", {'projectes': projectes})
 
+def editaProjecte(request, id):
+	return 'holi'
+
 
 # Mètriques
 
 # Retorna la view de la finestra de mètriques, on es veuen tots el resources creats d'aquest tipus.
 def metriques(request):
+	objectius = Objectiu.objects.values()
 	metriques = Metrica.objects.all()
-	return render(request, 'Metriques/metriques.html', {'metriques': metriques})
+	return render(request, 'Metriques/metriques.html', {'metriques': metriques, 'objectius': objectius})
 
 # Si el Request es GET, retorna la view de creació del resource amb el formulari buit.
 # Si el Request es POST, crea el request amb les dades obtingudes al formulari
@@ -142,7 +165,7 @@ def crearMetrica(request):
 			objectiu_id = request.POST['objectiu']
 			m = Metrica(nom=nom, descripcio=descripcio, maxim=maxim, minim=minim, objectiu_id=objectiu_id, unitat=unitat)
 			m.save()
-			return render(request, 'index.html')
+			return render(request, 'Metriques/metriques.html')
 	else:
 		form = MetricaForm() 
 	return render(request, 'Metriques/crear.html', {'form': form})
@@ -152,3 +175,6 @@ def eliminaMetrica(request, id):
 	metrica.delete()
 	metriques = Metrica.objects.all()
 	return render(request, "Metriques/metriques.html", {'metriques': metriques})
+
+def editaMetrica(request, id):
+	return 'holi'

@@ -19,7 +19,8 @@ TIPUS = (
 DateInput = partial(forms.DateInput, {'class': 'datepicker'})
 
 class PrincipiForm(forms.Form):
-    principi = forms.CharField(max_length=100)
+	id_principi = forms.HiddenInput()
+	principi = forms.CharField(max_length=100)
 
 class ObjectiuForm(forms.Form):
 	objectiu = forms.CharField(max_length=100)
