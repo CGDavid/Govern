@@ -1,10 +1,8 @@
 """
 Django settings for Govern project on Heroku. Fore more info, see:
 https://github.com/heroku/heroku-django-template
-
 For more information on this file, see
 https://docs.djangoproject.com/en/1.9/topics/settings/
-
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/1.9/ref/settings/
 """
@@ -76,12 +74,12 @@ WSGI_APPLICATION = 'Govern.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql',
+        'ENGINE': 'django.db.backends.mysql',
         'NAME': 'govern',
-        'USER': 'postgres',
-        'PASSWORD': 'hidrologia',
+        'USER': 'djangovern',
+        'PASSWORD': 'atupDmFCqhLWLmBs',
         'HOST': 'localhost',
-        'PORT': '5432',
+        'PORT': '3306',
     }
 }
 
