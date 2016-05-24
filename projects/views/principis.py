@@ -1,3 +1,10 @@
+# -*- coding: utf-8 -*-
+from django.http import HttpResponse, HttpResponseRedirect
+from django.shortcuts import render
+
+from projects.models import *
+from projects.forms import *
+
 # Principis
 
 # Retorna la view de la finestra de principis, on es veuen tots el resources creats d'aquest tipus.
