@@ -18,7 +18,10 @@
 	            <tr>
 	              <th style="width: 1%">ID</th>
 	              <th style="width: 20%">Objectiu</th>
+	              <th style="width: 20%">Descripcio</th>
 	              <th style="width: 20%">Principis</th>
+	              <th style="width: 20%">Mètriques</th>
+	              <th style="width: 20%">Opcions</th>
 	            </tr>
 	          </thead>
 	          <tbody>
@@ -36,7 +39,12 @@
 		                {{ objectiu.nom }}
 		              </td>
 
-		              <!-- Objectius -->
+									<!-- Descripció -->
+		              <td>
+		                {{ objectiu.descripcio }}
+		              </td>
+
+		              <!-- Principis -->
 		              <td>
 		              	{% for principi in objectiu.principis_objectius.all %}
 		              		{{ principi.nom }}
@@ -44,9 +52,19 @@
             			{% endfor %}
 		              </td>
 
+		              <!-- Mètriques -->
+		              <td>
+						{% for metrica in metriques %}
+							{% if metrica.objectiu_id == objectiu.id %}
+            					{{ metrica.nom }}
+            				{% endif %}
+            			{% endfor %}
+		              </td>
+
 		              <!-- Opcions -->
 		              <td>
-		                <a href="#" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i> Edita </a>
+  		                <a href="" class="btn btn-primary btn-xs"><i class="fa fa-folder"></i> Visualitza </a>
+		                <a href="objectius/edita/{{ objectiu.id }}" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i> Edita </a>
 		                <a href="/objectius/elimina/{{ objectiu.id }}" class="btn btn-danger btn-xs"><i class="fa fa-trash-o"></i> Esborra </a>
 		              </td>
 		            </tr>

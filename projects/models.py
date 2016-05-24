@@ -11,7 +11,7 @@ class Objectiu(models.Model):
     descripcio = models.TextField()
     
     def __unicode__(self):
-        return "%s" % (self.nom)
+        return "%s %s" % (self.nom, self.descripcio)
         
 
 class Projecte(models.Model):
