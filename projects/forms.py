@@ -19,6 +19,21 @@ TIPUS = (
 DateInput = partial(forms.DateInput, {'class': 'datepicker'})
 
 class PrincipiForm(forms.Form):
+	principi = forms.CharField(max_length=100)
+
+class PrincipiEditForm(forms.Form):
+
+	# Cream __init__ per poder passar-li arguments al model del formulari
+	def __init__(self, *args, **kwargs):
+		self.principi_id = kwargs.pop('principi_id')
+		super(PrincipiEditForm, self).__init__(*args, **kwargs)
+		principi = Principi.objects.get(id=self.principi_id)
+		# Id's dels objectius actuals
+		objectiusActuals = principi.objectiu.all().values_list('id', flat=True)
+		# Cream els inputs
+		self.fields['Objectius actuals'] = forms.ModelMultipleChoiceField(queryset=principi.objectiu.all())
+		self.fields["Resta d'objectius"] = forms.ModelMultipleChoiceField(queryset=Objectiu.objects.all().exclude(id__in=objectiusActuals))
+	
 	principi_id = forms.CharField(required=False, max_length=50, widget=forms.HiddenInput())
 	principi = forms.CharField(max_length=100)
 

@@ -38,7 +38,7 @@ def eliminaPrincipi(request, id):
 # Edició del principi correponent a la id
 def editaPrincipi(request, id):
 	principi = Principi.objects.filter(id=id).values('nom')[0]
-	form = PrincipiForm(initial={'principi': principi.get('nom'), 'principi_id':id })
+	form = PrincipiEditForm(initial={'principi': principi.get('nom'), 'principi_id':id }, principi_id=id)
 	return render(request, 'Principis/editar.html', {'form': form})
 
 # Actualitza les dades d'un principi
