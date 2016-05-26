@@ -10,9 +10,10 @@ from django.http import JsonResponse
 
 # Retorna la view de la finestra d'objectius, on es veuen tots el resources creats d'aquest tipus.
 def objectius(request):
+	projectes = Projecte.objects.all()
 	objectius = Objectiu.objects.all()
 	metriques = Metrica.objects.all()
-	return render(request, 'Objectius/objectius.html', {'objectius': objectius, 'metriques': metriques})
+	return render(request, 'Objectius/objectius.html', {'objectius': objectius, 'metriques': metriques, 'projectes': projectes})
 
 # Si el Request es GET, retorna la view de creació del resource amb el formulari buit.
 # Si el Request es POST, crea el request amb les dades obtingudes al formulari
@@ -52,7 +53,7 @@ def editaObjectiu(request, id):
 
 # Actualitza les dades d'un objectiu
 def updateObjectiu(request):
-	form = ObjectiuForm(request.POST)
+	form = ObjectiuEditForm(request.POST)
 	if form.is_valid():
 		nom = form.cleaned_data['objectiu']
 		descripcio = form.cleaned_data['descripcio']
@@ -91,3 +92,23 @@ def llevaMetrica(request, id):
 			for obj in metriques_a_eliminar:
 				Metrica.objects.get(id=obj).delete()
 			return JsonResponse({"response" : "Principi eliminat!"})
+
+# Lleva un projecte del objectiu (AJAX)
+def llevaProjecte(request, id):
+	if request.method == 'POST':
+		if request.is_ajax():
+			objectiu = Objectiu.objects.get(id=id)
+			projectes_a_eliminar = request.POST.getlist('obj[]')[0].split(",")
+			for obj in projectes_a_eliminar:
+				objectiu.projectes_objectius.remove(Projecte.objects.get(id=obj))
+			return JsonResponse({"response" : "Projecte eliminat!"})
+
+# Afegeix un projecte al objectiu (AJAX)
+def afegeixProjecte(request, id):
+	if request.method == 'POST':
+		if request.is_ajax():
+			objectiu = Objectiu.objects.get(id=id)
+			projectes_a_afegir = request.POST.getlist('obj[]')[0].split(",")
+			for obj in projectes_a_afegir:
+				objectiu.projectes_objectius.add(Projecte.objects.get(id=obj))
+			return JsonResponse({"response" : "Projecte creat!"})

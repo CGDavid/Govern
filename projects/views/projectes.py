@@ -1,9 +1,10 @@
 # -*- coding: utf-8 -*-
 from django.http import HttpResponse, HttpResponseRedirect
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 
 from projects.models import *
 from projects.forms import *
+from django.http import JsonResponse
 
 # Projectes
 
@@ -11,6 +12,12 @@ from projects.forms import *
 def projectes(request):
 	projectes = Projecte.objects.all()
 	return render(request, 'Projectes/projectes.html', {'projectes': projectes})
+
+# Mostra el projecte corresponent a la id
+def showProjecte(request, id):
+	projecte = Projecte.objects.get(id=id)
+	evaluacions = Evaluacio.objects.filter(projecte_id=id)
+	return render(request, 'Projectes/show.html', {'projecte': projecte, 'evaluacions' : evaluacions})
 
 # Si el Request es GET, retorna la view de creació del resource amb el formulari buit.
 # Si el Request es POST, crea el request amb les dades obtingudes al formulari
@@ -63,8 +70,8 @@ def editaProjecte(request, id):
 		'data_fi': projecte.get('data_fi'), 
 		'vMin': projecte.get('minim'), 
 		'vMax': projecte.get('maxim'),
-		'projecte_id': id })
-	return render(request, 'Projectes/editar.html', {'form': form})
+		'projecte_id': id }, projecte_id=id)
+	return render(request, 'Projectes/editar.html', {'form': form, 'projecte_id': id})
 
 # Actualitza les dades d'un projecte
 def updateProjecte(request):
@@ -94,3 +101,56 @@ def updateProjecte(request):
 			)
 	projectes = Projecte.objects.all()
 	return render(request, "Projectes/projectes.html", {'projectes': projectes})
+
+# Lleva un objectiu del projecte (AJAX)
+def llevaObjectiuP(request, id):
+	if request.method == 'POST':
+		if request.is_ajax():
+			projecte = Projecte.objects.get(id=id)
+			objectius_a_eliminar = request.POST.getlist('obj[]')[0].split(",")
+			for obj in objectius_a_eliminar:
+				projecte.objectiu.remove(Objectiu.objects.get(id=obj))
+			return JsonResponse({"response" : "Objectiu eliminat!"})
+
+# Afegeix un objectiu al projecte (AJAX)
+def afegeixObjectiuP(request, id):
+	if request.method == 'POST':
+		if request.is_ajax():
+			projecte = Projecte.objects.get(id=id)
+			objectius_a_afegir = request.POST.getlist('obj[]')[0].split(",")
+			for obj in objectius_a_afegir:
+				projecte.objectiu.add(Objectiu.objects.get(id=obj))
+			return JsonResponse({"response" : "Objectiu creat!"})
+
+def crearEvaluacio(request, id):
+	puntuacio_responsabilitat = request.POST['nota_responsabilitat']
+	puntuacio_estrategia = request.POST['nota_estrategia']
+	puntuacio_adquisicio = request.POST['nota_adquisicio']
+	puntuacio_rendiment = request.POST['nota_rendiment']
+	puntuacio_conformitat = request.POST['nota_conformitat']
+	puntuacio_conducta = request.POST['nota_conducta']
+	comentari_responsabilitat = request.POST['comentari_responsabilitat']
+	comentari_estrategia = request.POST['comentari_estrategia']
+	comentari_adquisicio = request.POST['comentari_adquisicio']
+	comentari_rendiment = request.POST['comentari_rendiment']
+	comentari_conformitat = request.POST['comentari_conformitat']
+	comentari_conducta = request.POST['comentari_conducta']
+	
+	evaluacio = Evaluacio(
+		puntuacio_responsabilitat=puntuacio_responsabilitat,
+		puntuacio_estrategia=puntuacio_estrategia,
+		puntuacio_adquisicio=puntuacio_adquisicio,
+		puntuacio_rendiment=puntuacio_rendiment,
+		puntuacio_conformitat=puntuacio_conformitat,
+		puntuacio_conducta=puntuacio_conducta,
+		comentari_responsabilitat=comentari_responsabilitat,
+		comentari_estrategia=comentari_estrategia,
+		comentari_adquisicio=comentari_adquisicio,
+		comentari_rendiment=comentari_rendiment,
+		comentari_conformitat=comentari_conformitat,
+		comentari_conducta=comentari_conducta,
+		projecte_id = id
+		)
+	evaluacio.save()
+
+	return redirect('/projectes/'+id, args={'projecte_id':id})

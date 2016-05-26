@@ -56,10 +56,13 @@ class ObjectiuEditForm(forms.Form):
 			objectiu = Objectiu.objects.get(id=self.objectiu_id)
 			# Id's dels principis i metriques actuals
 			principisActuals = objectiu.principis_objectius.all().values_list('id', flat=True)
+			projectesActuals = objectiu.projectes_objectius.all().values_list('id', flat=True)
 			metriquesActuals = Metrica.objects.filter(objectiu_id=self.objectiu_id)
 			# Cream els inputs
 			self.fields['Principis'] = forms.ModelMultipleChoiceField(queryset=objectiu.principis_objectius.all())
 			self.fields['Principis_Restants'] = forms.ModelMultipleChoiceField(queryset=Principi.objects.all().exclude(id__in=principisActuals))
+			self.fields['Projectes'] = forms.ModelMultipleChoiceField(queryset=objectiu.projectes_objectius.all())
+			self.fields['Projectes_Restants'] = forms.ModelMultipleChoiceField(queryset=Projecte.objects.all().exclude(id__in=projectesActuals))
 			self.fields['Metriques'] = forms.ModelMultipleChoiceField(queryset=Metrica.objects.filter(objectiu_id=self.objectiu_id))
 
 		self.fields['objectiu_id'] = forms.CharField(required=False, max_length=50, widget=forms.HiddenInput())
@@ -81,18 +84,31 @@ class ProjecteForm(forms.Form):
 	vMax = forms.IntegerField()
 
 class ProjecteEditForm(forms.Form):
-	projecte_id = forms.CharField(required=False, max_length=50, widget=forms.HiddenInput())
-	projecte = forms.CharField(max_length=100)
-	descripcio = forms.CharField(widget=forms.Textarea)
-	presupost = forms.IntegerField()
-	estat = forms.ChoiceField(required=False, 
-		widget=forms.Select, choices=ESTAT)
-	tipus = forms.ChoiceField(required=False, 
-		widget=forms.Select, choices=TIPUS)
-	data_inici = forms.DateField(widget=DateInput())
-	data_fi = forms.DateField(widget=DateInput())
-	vMin = forms.IntegerField()
-	vMax = forms.IntegerField()
+
+	# Cream __init__ per poder passar-li arguments al model del formulari
+	def __init__(self, *args, **kwargs):
+		# Aquest if es un truco que he hagut de fer ja que quan enviaves el formulari, com no li pass sa id petava 
+		if 'projecte_id' in kwargs:
+			self.projecte_id = kwargs.pop('projecte_id')
+		super(ProjecteEditForm, self).__init__(*args, **kwargs)
+		if hasattr(self, 'projecte_id'):
+			projecte = Projecte.objects.get(id=self.projecte_id)
+			# Id's dels principis i metriques actuals
+			objectiusActuals = projecte.objectiu.all().values_list('id', flat=True)
+			# Cream els inputs
+			self.fields['Objectius'] = forms.ModelMultipleChoiceField(queryset=projecte.objectiu.all())
+			self.fields['Objectius_Restants'] = forms.ModelMultipleChoiceField(queryset=Objectiu.objects.all().exclude(id__in=objectiusActuals))
+			
+		self.fields['projecte_id'] = forms.CharField(required=False, max_length=50, widget=forms.HiddenInput())
+		self.fields['projecte'] = forms.CharField(max_length=100)
+		self.fields['descripcio'] = forms.CharField(widget=forms.Textarea)
+		self.fields['presupost'] = forms.IntegerField()
+		self.fields['estat'] = forms.ChoiceField(required=False, widget=forms.Select, choices=ESTAT)
+		self.fields['tipus'] = forms.ChoiceField(required=False, widget=forms.Select, choices=TIPUS)
+		self.fields['data_inici'] = forms.DateField(widget=DateInput())
+		self.fields['data_fi'] = forms.DateField(widget=DateInput())
+		self.fields['vMin'] = forms.IntegerField()
+		self.fields['vMax'] = forms.IntegerField()
 
 class MetricaForm(forms.Form):
 	metrica = forms.CharField(max_length=100)

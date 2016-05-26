@@ -32,12 +32,24 @@
                     </div>
                   {% endif %}
 
+                  {% if field.label == "Projectes" %}
+                    <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3" style="float:none">
+                      <br><button id='lleva_projectes' type="button" href="asd" class="btn btn-danger">Lleva projectes</button>
+                    </div>
+                  {% endif %}
+
+                  {% if field.label == "Projectes restants" %}
+                    <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3" style="float:none">
+                      <br><button id='afegeix_projectes' type="button" class="btn btn-info">Afegeix projectes</button>
+                    </div>
+                  {% endif %}
+
                   {% if field.label == "Metriques" %}
                     <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3" style="float:none">
                       <br><button id='lleva_metriques' type="button" href="asd" class="btn btn-danger">Elimina mètriques</button>
                     </div>
                   {% endif %}
-                  <br> <br>
+                  <br><br>
                 {% endfor %}
                 <hr>
                 <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
@@ -91,6 +103,51 @@
              {
                 // Movemos los seleccionados a lista de principios actuales
                 $('#id_Principis_Restants').find(':selected').appendTo('#id_Principis');
+             }, error: function (jqXHR, textStatus, errorThrown){
+                console.log(jqXHR.responseText);
+             }
+          });
+    });
+  </script>    
+
+  <!-- Eliminar proyectos -->
+  <script>
+    $('#lleva_projectes').click(function() {
+      var csrftoken = getCookie('csrftoken');
+      var projectes = $('#id_Projectes').val();
+      // Eliminamos los seleccionados mediante consulta AJAX
+      $.ajax({
+             type: "POST",
+             url: "/lleva/projecte/{{objectiu_id}}",
+             data: { csrfmiddlewaretoken : csrftoken,
+              'obj[]': projectes.join(", ") },
+             success: function(data)
+             {
+                console.log(data['response']);
+                // Movemos los seleccionados a lista de otros principios
+                $('#id_Projectes').find(':selected').appendTo('#id_Projectes_Restants');
+             }, error: function (jqXHR, textStatus, errorThrown){
+                console.log(jqXHR.responseText);
+             }
+          });
+    });
+  </script>
+
+  <!-- Añadir proyectos -->
+  <script>
+    $('#afegeix_projectes').click(function() {
+      var csrftoken = getCookie('csrftoken');
+      var projectes = $('#id_Projectes_Restants').val();
+      // Eliminamos los seleccionados mediante consulta AJAX
+      $.ajax({
+             type: "POST",
+             url: "/afegeix/projecte/{{objectiu_id}}",
+             data: { csrfmiddlewaretoken : csrftoken,
+              'obj[]': projectes.join(", ") },
+             success: function(data)
+             {
+                // Movemos los seleccionados a lista de principios actuales
+                $('#id_Projectes_Restants').find(':selected').appendTo('#id_Projectes');
              }, error: function (jqXHR, textStatus, errorThrown){
                 console.log(jqXHR.responseText);
              }

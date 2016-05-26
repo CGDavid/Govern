@@ -21,6 +21,7 @@
 	              <th style="width: 20%">Descripcio</th>
 	              <th style="width: 20%">Principis</th>
 	              <th style="width: 20%">Mètriques</th>
+	              <th style="width: 20%">Projectes</th>
 	              <th style="width: 20%">Opcions</th>
 	            </tr>
 	          </thead>
@@ -59,6 +60,14 @@
             					{{ metrica.nom }}
             					<br>
             				{% endif %}
+            			{% endfor %}
+		              </td>
+
+		              <!-- Mètriques -->
+		              <td>
+		              	{% for projecte in objectiu.projectes_objectius.all %}
+		              		{{ projecte.nom }}
+		              		<br>
             			{% endfor %}
 		              </td>
 

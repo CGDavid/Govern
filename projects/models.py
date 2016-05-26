@@ -41,7 +41,7 @@ class Projecte(models.Model):
     minim = models.PositiveSmallIntegerField(null=True)
     
     def __unicode__(self):
-        return "%s (%s) [%s - %s]" % (self.nom, self.get_estat_display(), self.data_inici, self.data_fi)
+        return "%s" % (self.nom)
         
 
 class Metrica(models.Model):

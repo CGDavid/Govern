@@ -1,0 +1,331 @@
+      
+{% extends "Common/base.html" %}
+
+{% block content %}
+
+  <div class="" role="main">
+    <div class="">
+
+      <div class="clearfix"></div>
+
+      <div class="row">
+        <div class="page-title">
+            <div class="title_left">
+              <h3>{{ projecte.nom }}</h3>
+            </div>
+        </div>
+        <div class="col-xs-12">
+          <div class="x_panel">
+            <div class="x_title">
+              <ul class="nav navbar-right panel_toolbox">
+                <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                </li>
+              </ul>
+              <h2>Informació del projecte</h2>
+              
+              <div class="clearfix"></div>
+            </div>
+            <div class="x_content">
+              <div class="row">
+
+                <div class="col-sm-4">
+                  <!-- Columna izquierda -->
+                  <div class="x_content">
+                    <!-- Objectius -->
+                    <ul class="list-unstyled timeline">
+                      {% for objectiu in projecte.objectiu.all %}
+                        <li>
+                          <div class="block">
+                            <div class="tags">
+                              <a href="" class="tag">
+                                <span>{{ objectiu.nom }}</span>
+                              </a>
+                            </div>
+                            <div class="block_content">
+                              <!-- Descripció -->
+                              <p class="excerpt">
+                                {{ objectiu.descripcio }}
+                              </p>
+                            </div>
+                          </div>
+                        </li>
+                      {% endfor %}
+                      
+                    </ul>
+                  </div>
+                </div>
+                <!-- /columna izquierda -->
+
+                <!-- Columna derecha -->
+                <div class="col-sm-8 mail_view">
+                  <div class="inbox-body">
+
+
+                     <div class="row">
+                      <div class="col-md-offset-3 col-md-3 col-sm-4 col-xs-6 tile_stats_count">
+                        <span class="count_top"><i class="fa fa-calendar"></i> Data Inici </span>
+                        <h2>{{ projecte.data_inici }}</h2>
+                      </div>
+                      <div class="col-md-3 col-sm-4 col-xs-6 tile_stats_count">
+                        <span class="count_top"><i class="fa fa-calendar-times-o"></i> Data Fi </span>
+                        <h2>{{ projecte.data_fi }}</h2>
+                      </div>                   
+                    </div>
+                   
+                    <div class="mail_heading row">
+                      <div class="col-md-12">
+                        <h4> Descripció </h4>
+                      </div>
+                    </div>
+                    <div class="view-mail">
+                      <!-- Descripció -->
+                      <p> {{ projecte.descripcio }} </p>
+                    </div>
+                    <br>
+                    <!-- top tiles -->
+                    <div class="row">
+                      <div class="animated flipInY col-lg-4 col-md-4 col-sm-6 col-xs-12">
+                        <div class="tile-stats">
+                          <div class="count">€ {{ projecte.presupost }}</div>
+                          <h3>Pressupost</h3>
+                        </div>
+                      </div>
+                      <div class="animated flipInY col-lg-4 col-md-4 col-sm-6 col-xs-12">
+                        <div class="tile-stats">
+                          <div class="count">
+                            {% if projecte.tipus == 'F2P' %}
+                              Free to play
+                            {% elif projecte.tipus == 'CO'%}
+                              Convencional
+                            {% elif projecte.tipus == 'ALT'%}
+                              Altres
+                            {% endif %}
+                          </div>
+                          <h3>Tipus</h3>
+                        </div>
+                      </div>
+                      <div class="animated flipInY col-lg-4 col-md-4 col-sm-6 col-xs-12">
+                        <div class="tile-stats">
+                          <div class="count">
+                            {% if projecte.estat == 'PE' %}
+                              Pendent
+                            {% elif projecte.estat == 'PR'%}
+                              En progrés
+                            {% elif projecte.estat == 'RE'%}
+                              Rebutjat
+                            {% elif projecte.estat == 'FI'%}
+                              Finalitzat
+                            {% endif %}
+                          </div>
+
+                          <h3>Estat</h3>
+                        </div>
+                      </div>                   
+                    </div>
+                    <!-- /top tiles -->
+
+                  </div>
+                <!-- /columna derecha -->
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-8 col-sm-12">
+              <!-- Evaluacions -->
+              <div class="x_panel">
+                <div class="x_title">
+                  <ul class="nav navbar-right panel_toolbox">
+                    <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                    </li>
+                  </ul>
+                  <h2>Evaluacions</h2>
+        
+                  <div class="clearfix"></div>
+                </div>
+                <div class="x_content">
+
+                  {% for evaluacio in evaluacions %}
+
+                    <h5>{{ evaluacio.creat }}</h5>
+                    <div class="row">
+                      <div class="table-responsive">
+                        <table class="table table-striped jambo_table bulk_action">
+                          <thead>
+                            <tr class="headings">
+                              <th class="column-title">Tipus </th>
+                              <th class="column-title">Puntuació </th>
+                              <th class="column-title">Comentari </th>
+                            </tr>
+                          </thead>
+
+                          <tbody>
+                            <tr>
+                              <td><b>Responsabilitat</b></td>
+                              <td>{{ evaluacio.puntuacio_responsabilitat }}</td>
+                              <td>{{ evaluacio.comentari_responsabilitat }}</td>
+                            </tr>
+                            <tr>
+                              <td><b>Estratègia</b></td>
+                              <td>{{ evaluacio.puntuacio_estrategia }}</td>
+                              <td>{{ evaluacio.comentari_estrategia }}</td>
+                            </tr>                    
+                            <tr>
+                              <td><b>Adquisició</b></td>
+                              <td>{{ evaluacio.puntuacio_adquisicio }}</td>
+                              <td>{{ evaluacio.comentari_adquisicio }}</td>
+                            </tr>                    
+                            <tr>
+                              <td><b>Rendiment</b></td>
+                              <td>{{ evaluacio.puntuacio_rendiment }}</td>
+                              <td>{{ evaluacio.comentari_rendiment }}</td>
+                            </tr>                    
+                            <tr>
+                              <td><b>Conformitat</b></td>
+                              <td>{{ evaluacio.puntuacio_conformitat }}</td>
+                              <td>{{ evaluacio.comentari_conformitat }}</td>
+                            </tr>                    
+                            <tr>
+                              <td><b>Conducta</b></td>
+                              <td>{{ evaluacio.puntuacio_conducta }}</td>
+                              <td>{{ evaluacio.comentari_conducta }}</td>
+                            </tr>                    
+                          </tbody>
+                        </table>
+                      </div>
+                    </div> 
+
+                  {% endfor %}
+
+                </div>
+              </div> 
+            </div>
+
+            <div class="col-md-4 col-sm-12">
+              <!-- Evaluacions -->
+              <div class="x_panel">
+                <div class="x_title">
+                  <ul class="nav navbar-right panel_toolbox">
+                    <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                    </li>
+                  </ul>
+                  <h2>Crea una evaluació</h2>
+
+                  <div class="clearfix"></div>
+                </div>
+                <div class="x_content">
+                  <form id="demo-form2" data-parsley-validate class="form-horizontal form-label-left" method="post" action="/evaluacio/crear/{{projecte.id}}">
+                      {% csrf_token %}
+                      <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12" for="nota_estrategia">Nota Estratègia <span class="required"></span>
+                        </label>
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                          <input type="number" id="nota_estrategia" name="nota_estrategia" required="required" data-validate-minmax="0,10" class="form-control col-md-7 col-xs-12">
+                        </div>
+                      </div>
+                      <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12" for="comentari_estrategia">Comentari Estratègia <span class="required"></span>
+                        </label>
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                          <input type="text" id="comentari_estrategia" name="comentari_estrategia" required="required" class="form-control col-md-7 col-xs-12">
+                        </div>
+                      </div>
+
+                      <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12" for="nota_adquisicio">Nota Adquisició <span class="required"></span>
+                        </label>
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                          <input type="number" id="nota_adquisicio" name="nota_adquisicio" required="required" data-validate-minmax="0,10" class="form-control col-md-7 col-xs-12">
+                        </div>
+                      </div>
+                      <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12" for="comentari_adquisicio">Comentari Adquisició <span class="required"></span>
+                        </label>
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                          <input type="text" id="comentari_adquisicio" name="comentari_adquisicio" required="required" class="form-control col-md-7 col-xs-12">
+                        </div>
+                      </div>
+
+                      <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12" for="nota_rendiment">Nota Rendiment <span class="required"></span>
+                        </label>
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                          <input type="number" id="nota_rendiment" name="nota_rendiment" required="required" data-validate-minmax="0,10" class="form-control col-md-7 col-xs-12">
+                        </div>
+                      </div>
+                      <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12" for="comentari_rendiment">Comentari Rendiment <span class="required"></span>
+                        </label>
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                          <input type="text" id="comentari_rendiment" name="comentari_rendiment" required="required" class="form-control col-md-7 col-xs-12">
+                        </div>
+                      </div>
+
+                      <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12" for="nota_conformitat">Nota Conformitat <span class="required"></span>
+                        </label>
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                          <input type="number" id="nota_conformitat" name="nota_conformitat" required="required" data-validate-minmax="0,10" class="form-control col-md-7 col-xs-12">
+                        </div>
+                      </div>
+                      <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12" for="comentari_conformitat">Comentari Conformitat <span class="required"></span>
+                        </label>
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                          <input type="text" id="comentari_conformitat" name="comentari_conformitat" required="required" class="form-control col-md-7 col-xs-12">
+                        </div>
+                      </div>
+
+                      <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12" for="nota_conducta">Nota Conducta <span class="required"></span>
+                        </label>
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                          <input type="number" id="nota_conducta" name="nota_conducta" required="required" data-validate-minmax="0,10" class="form-control col-md-7 col-xs-12">
+                        </div>
+                      </div>
+                      <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12" for="comentari_conducta">Comentari Conducta <span class="required"></span>
+                        </label>
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                          <input type="text" id="comentari_conducta" name="comentari_conducta" required="required" class="form-control col-md-7 col-xs-12">
+                        </div>
+                      </div>
+
+                      <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12" for="nota_responsabilitat">Nota Responsabilitat <span class="required"></span>
+                        </label>
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                          <input type="number" id="nota_responsabilitat" name="nota_responsabilitat" required="required" data-validate-minmax="0,10" class="form-control col-md-7 col-xs-12">
+                        </div>
+                      </div>
+                      <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12" for="comentari_responsabilitat">Comentari Responsabilitat <span class="required"></span>
+                        </label>
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                          <input type="text" id="comentari_responsabilitat" name="comentari_responsabilitat" required="required" class="form-control col-md-7 col-xs-12">
+                        </div>
+                      </div>
+
+
+
+
+                      <div class="ln_solid"></div>
+
+                      <div class="form-group">
+                        <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-5">
+                          <button type="submit" class="btn btn-success col-xs-6 ">Crear</button>
+                        </div>
+                      </div>
+
+                    </form>
+                </div>
+              </div>
+            </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
