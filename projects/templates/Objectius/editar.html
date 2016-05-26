@@ -19,11 +19,29 @@
                   <label class="control-label col-md-3 col-sm-3 col-xs-12"
                  for="{{ field.name }}">{{ field.label }}</label>
                   {{ field }}
+
+                  {% if field.label == "Principis" %}
+                    <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3" style="float:none">
+                      <br><button id='lleva_principis' type="button" href="asd" class="btn btn-danger">Lleva principis</button>
+                    </div>
+                  {% endif %}
+
+                  {% if field.label == "Principis restants" %}
+                    <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3" style="float:none">
+                      <br><button id='afegeix_principis' type="button" class="btn btn-info">Afegeix principis</button>
+                    </div>
+                  {% endif %}
+
+                  {% if field.label == "Metriques" %}
+                    <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3" style="float:none">
+                      <br><button id='lleva_metriques' type="button" href="asd" class="btn btn-danger">Elimina mètriques</button>
+                    </div>
+                  {% endif %}
                   <br> <br>
                 {% endfor %}
                 <hr>
                 <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
-                  <input type="submit" value="Crear" class="btn btn-success"/>
+                  <input type="submit" value="Edita" class="btn btn-success"/>
                 </div>
               </div>
             </div>
@@ -32,4 +50,74 @@
       </div>
     </div>
   </div>
+{% endblock %}
+
+{% block scripts %}
+  <!-- Eliminar principios -->
+  <script>
+    $('#lleva_principis').click(function() {
+      var csrftoken = getCookie('csrftoken');
+      var principis = $('#id_Principis').val();
+      // Eliminamos los seleccionados mediante consulta AJAX
+      $.ajax({
+             type: "POST",
+             url: "/lleva/principi/{{objectiu_id}}",
+             data: { csrfmiddlewaretoken : csrftoken,
+              'obj[]': principis.join(", ") },
+             success: function(data)
+             {
+                console.log(data['response']);
+                // Movemos los seleccionados a lista de otros principios
+                $('#id_Principis').find(':selected').appendTo('#id_Principis_Restants');
+             }, error: function (jqXHR, textStatus, errorThrown){
+                console.log(jqXHR.responseText);
+             }
+          });
+    });
+  </script>
+
+  <!-- Añadir principios -->
+  <script>
+    $('#afegeix_principis').click(function() {
+      var csrftoken = getCookie('csrftoken');
+      var principis = $('#id_Principis_Restants').val();
+      // Eliminamos los seleccionados mediante consulta AJAX
+      $.ajax({
+             type: "POST",
+             url: "/afegeix/principi/{{objectiu_id}}",
+             data: { csrfmiddlewaretoken : csrftoken,
+              'obj[]': principis.join(", ") },
+             success: function(data)
+             {
+                // Movemos los seleccionados a lista de principios actuales
+                $('#id_Principis_Restants').find(':selected').appendTo('#id_Principis');
+             }, error: function (jqXHR, textStatus, errorThrown){
+                console.log(jqXHR.responseText);
+             }
+          });
+    });
+  </script>  
+
+  <!-- Eliminar métricas -->
+  <script>
+    $('#lleva_metriques').click(function() {
+      var csrftoken = getCookie('csrftoken');
+      var metricas = $('#id_Metriques').val();
+      // Eliminamos los seleccionados mediante consulta AJAX
+      $.ajax({
+             type: "POST",
+             url: "/lleva/metrica/{{objectiu_id}}",
+             data: { csrfmiddlewaretoken : csrftoken,
+              'obj[]': metricas.join(", ") },
+             success: function(data)
+             {
+                console.log(data['response']);
+                // Movemos los seleccionados a lista de otros principios
+                $('#id_Metriques').find(':selected').remove();
+             }, error: function (jqXHR, textStatus, errorThrown){
+                console.log(jqXHR.responseText);
+             }
+          });
+    });
+  </script>
 {% endblock %}

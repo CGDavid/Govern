@@ -25,4 +25,10 @@ urlpatterns = [
     url(r'^metriques/elimina/(?P<id>[0-9]+)$', views.eliminaMetrica, name='metriques.elimina'),
     url(r'^metriques/edita/(?P<id>[0-9]+)$', views.editaMetrica, name='metriques.edita'),
     url(r'^metriques/update$', views.updateMetrica, name='metriques.update'),
+    
+    url(r'^lleva/objectiu/(?P<id>[0-9]+)$', views.llevaObjectiu, name='principis.llevaObjectiu'),
+    url(r'^afegeix/objectiu/(?P<id>[0-9]+)$', views.afegeixObjectiu, name='principis.afegeixObjectiu'),    
+    url(r'^lleva/principi/(?P<id>[0-9]+)$', views.llevaPrincipi, name='principis.llevaPrincipi'),
+    url(r'^afegeix/principi/(?P<id>[0-9]+)$', views.afegeixPrincipi, name='principis.afegeixPrincipi'),
+    url(r'^lleva/metrica/(?P<id>[0-9]+)$', views.llevaMetrica, name='principis.llevaMetrica'),
 ]

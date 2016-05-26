@@ -58,7 +58,7 @@ class Metrica(models.Model):
     minim = models.PositiveSmallIntegerField(null=True)
     
     def __unicode__(self):
-        return "%s" % (self.nom, self.descripcio)
+        return "%s" % (self.nom)
 
 
 class Principi(models.Model):

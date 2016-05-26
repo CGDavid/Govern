@@ -8,7 +8,6 @@
           <!-- Cabecera -->
           <div class="x_title">
             <h2>Editar Principi</h2>
-            
             <div class="clearfix"></div>
           </div>
 
@@ -19,11 +18,22 @@
                   <label class="control-label col-md-3 col-sm-3 col-xs-12"
                  for="{{ field.name }}">{{ field.label }}</label>
                   {{ field }}
-                  <br> <br>
+                  {% if field.label == "Objectius" %}
+                    <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3" style="float:none">
+                      <br><button id='lleva' type="button" href="asd" class="btn btn-danger">Lleva objectiu</button>
+                    </div>
+                  {% endif %}
+                  {% if field.label == "Restants" %}
+                    <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3" style="float:none">
+                      <br><button id='afegeix' type="button" class="btn btn-info">Afegeix objectiu</button>
+                    </div>
+                  {% endif %}
+
+                  <br><br>
                 {% endfor %}
                 <hr>
                 <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
-                  <input type="submit" value="Crear" class="btn btn-success"/>
+                  <input type="submit" value="Edita" class="btn btn-success"/>
                 </div>
               </div>
             </div>
@@ -35,7 +45,48 @@
 {% endblock %}
 
 {% block scripts %}
-<script>
+  <!-- Eliminar objetivos -->
+  <script>
+    $('#lleva').click(function() {
+      var csrftoken = getCookie('csrftoken');
+      var objectius = $('#id_Objectius').val();
+      // Eliminamos los seleccionados mediante consulta AJAX
+      $.ajax({
+             type: "POST",
+             url: "/lleva/objectiu/{{principi_id}}",
+             data: { csrfmiddlewaretoken : csrftoken,
+              'obj[]': objectius.join(", ") },
+             success: function(data)
+             {
+                console.log(data['response']);
+                // Movemos los seleccionados a lista de otros objetivos
+                $('#id_Objectius').find(':selected').appendTo('#id_Restants');
+             }, error: function (jqXHR, textStatus, errorThrown){
+                console.log(jqXHR.responseText);
+             }
+          });
+    });
+  </script>
 
-</script>
+  <!-- Añadir objetivos -->
+  <script>
+    $('#afegeix').click(function() {
+      var csrftoken = getCookie('csrftoken');
+      var objectius = $('#id_Restants').val();
+      // Eliminamos los seleccionados mediante consulta AJAX
+      $.ajax({
+             type: "POST",
+             url: "/afegeix/objectiu/{{principi_id}}",
+             data: { csrfmiddlewaretoken : csrftoken,
+              'obj[]': objectius.join(", ") },
+             success: function(data)
+             {
+                // Movemos los seleccionados a lista de objetivos actuales
+                $('#id_Restants').find(':selected').appendTo('#id_Objectius');
+             }, error: function (jqXHR, textStatus, errorThrown){
+                console.log(jqXHR.responseText);
+             }
+          });
+    });
+  </script>
 {% endblock %}

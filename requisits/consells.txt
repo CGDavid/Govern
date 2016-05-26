@@ -1,0 +1,61 @@
+-----------------------------------------------------------------------------------------------------------------------------------------
+Gestió econòmica: Que tot això ho podem posar a la pàgina de inici (i mencionat allà).
+
+	- Doblers assignats anuals
+	- Doblers que gasta cada projecte
+	- Gràfica - doblers que gasta cada objectiu - es compleix l'objectiu? -> Mètriques
+-----------------------------------------------------------------------------------------------------------------------------------------
+
+Les alertes o avisos poden sorgir de:
+	- les evaluacions: mencionat posteriorment
+	- de la gestió econòmica: si la suma total dels costs dels projectes es superior al pressupost d'aquell any. El pressupost total el definirem a la pàgina de inici, i tendrem la suma dels projectes(això ho podem representar amb una gràfica de lineas, mencionat al primer paragraf de l'inici).
+	- de si el valor de la mètrica es inferior de l'umbral (<V.Min = Vermell, v.Min-V.Max = Groc, >V.Max= Verd) en l'apartat de les mètriques.
+-----------------------------------------------------------------------------------------------------------------------------------------
+Un projecte per objectiu com a mínim: Ja m'encarregare jo (paye) de omplir la BD.
+-----------------------------------------------------------------------------------------------------------------------------------------
+Inici:
+	Un titol on posi el pressupost total que tenim aquest any
+
+	Una gràfica grosa que surti el pressupost total de la empresa, i el pressupost que se du gastat ara de la empresa ens els distints projectes acceptats i desarrollantse, ja que queda bé per la gestió económica (Grafica1)
+
+	També hi hauria de haver una llista amb els projectes pendent/dessarrollant/rebutjat (rebutjat el pintarem de color vermell fins que l'eliminem), els pendents les podriem pintar de color groc, ja que necesiten o estar aceptat i per consiguient dessarrollantse o rebutjat (i tornam a l'exemple anterior). El desarrollant pot tenir els tres colors:
+
+		-Vermell: si el valor mitj de les evaluacions (valor actual de les evaluacions, no valor de l'historial) esta entre [  < ValorUmbralMin]
+
+		-Groc: si el valor mitj de les evaluacions esta entre [valorUmbralMin < valor < valorUmbralMax]
+
+		-Verd: si el valor mitj de les evaluacions esta entre [ > valorUmbralMax]
+
+	Un apartat de avisos, que t'avisi si cualque projecte ha tengut una modificació i/o ha canviat de color per el motiu que sigui
+
+	Aportació: m'han dit que si per exemple surt un projecte amb vermell, a la tia li agrada que surti perque esta vermell i que es pugui modificar, si es possible, aquest avis directament
+
+-----------------------------------------------------------------------------------------------------------------------------------------
+Projecte:
+	-Hem de poder observar totes les dades del projecte.
+
+	- El projecte hauria de tenir una gráfica amb les distintes evaluacions que es fan durant el seguiment del projecte, on es mostrara les distintes evaluacions mitjanes fetes a cada evaluació(eix de les Y = de 0 a 10 amb les nota mitjana de la evaluacio, eix de les X = la fecha de les distintes evaluacions)--> (Grafica 2).
+
+	- El projecte pot modificar alguna dada.
+
+	- Hem de poder afegir una nova evaluació al projecte, per avaluarlo.
+-----------------------------------------------------------------------------------------------------------------------------------------
+Objectius:
+	- En els objectius hem de dibuixar una gràfica per cada mètrica (grafica3)
+
+	- Hem de poder veure si s'acompleix l'objectiu amb les pertinents mètriques (si el valor de les metriques del respectiu objectiu son més grans que el V.min (de les mètriques), que ho podriem fer amb colors tambe, per exemple: grafica4)
+
+	- Hem de tenir la opció de poder afegir mètriques
+
+	- Hem de poder modificar els umbrals de les mètriques (v.Min y V.Max, definit posteriorment)
+-----------------------------------------------------------------------------------------------------------------------------------------
+Metriques:
+	- Hem de poder afegir/eliminar mètriques
+
+	- Hem de poder variar el valor V.Min i V.Max de les distintes mètriques
+-----------------------------------------------------------------------------------------------------------------------------------------
+Evaluacions:
+	- Hem de poder fer noves evaluacions d'un projecte(el projecte ha d'existir)
+-----------------------------------------------------------------------------------------------------------------------------------------
+Principis:
+	-Hem de poder crear/eliminar un principi

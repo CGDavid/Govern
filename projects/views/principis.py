@@ -4,6 +4,7 @@ from django.shortcuts import render
 
 from projects.models import *
 from projects.forms import *
+from django.http import JsonResponse
 
 # Principis
 
@@ -39,14 +40,34 @@ def eliminaPrincipi(request, id):
 def editaPrincipi(request, id):
 	principi = Principi.objects.filter(id=id).values('nom')[0]
 	form = PrincipiEditForm(initial={'principi': principi.get('nom'), 'principi_id':id }, principi_id=id)
-	return render(request, 'Principis/editar.html', {'form': form})
+	return render(request, 'Principis/editar.html', {'form': form, 'principi_id':id})
 
 # Actualitza les dades d'un principi
 def updatePrincipi(request):
 	form = PrincipiForm(request.POST)
 	if form.is_valid():
 		nom = form.cleaned_data['principi']
-		principi_id = form.cleaned_data['principi_id']
+		principi_id = form.data['principi_id']
 		principi = Principi.objects.filter(id=principi_id).update(nom=nom)
 		principis = Principi.objects.all()
 	return render(request, "Principis/principis.html", {'principis': principis})
+
+# Lleva un objectiu del principi (AJAX)
+def llevaObjectiu(request, id):
+	if request.method == 'POST':
+		if request.is_ajax():
+			principi = Principi.objects.get(id=id)
+			objectius_a_eliminar = request.POST.getlist('obj[]')[0].split(",")
+			for obj in objectius_a_eliminar:
+				principi.objectiu.remove(Objectiu.objects.get(id=obj))
+			return JsonResponse({"response" : "Objectiu eliminat!"})
+
+# Afegeix un objectiu al principi (AJAX)
+def afegeixObjectiu(request, id):
+	if request.method == 'POST':
+		if request.is_ajax():
+			principi = Principi.objects.get(id=id)
+			objectius_a_afegir = request.POST.getlist('obj[]')[0].split(",")
+			for obj in objectius_a_afegir:
+				principi.objectiu.add(Objectiu.objects.get(id=obj))
+			return JsonResponse({"response" : "Objectiu creat!"})

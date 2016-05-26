@@ -4,6 +4,7 @@ from django.shortcuts import render
 
 from projects.models import *
 from projects.forms import *
+from django.http import JsonResponse
 
 # Objectius
 
@@ -46,12 +47,12 @@ def eliminaObjectiu(request, id):
 # Edita un objectiu corresponent a la id del argument
 def editaObjectiu(request, id):
 	objectiu = Objectiu.objects.filter(id=id).values()[0]
-	form = ObjectiuEditForm(initial={'objectiu': objectiu.get('nom'), 'descripcio': objectiu.get('descripcio'), 'objectiu_id':id })
-	return render(request, 'Objectius/editar.html', {'form': form})
+	form = ObjectiuEditForm(initial={'objectiu': objectiu.get('nom'), 'descripcio': objectiu.get('descripcio'), 'objectiu_id':id }, objectiu_id=id)
+	return render(request, 'Objectius/editar.html', {'form': form, 'objectiu_id': id})
 
 # Actualitza les dades d'un objectiu
 def updateObjectiu(request):
-	form = ObjectiuEditForm(request.POST)
+	form = ObjectiuForm(request.POST)
 	if form.is_valid():
 		nom = form.cleaned_data['objectiu']
 		descripcio = form.cleaned_data['descripcio']
@@ -60,3 +61,33 @@ def updateObjectiu(request):
 	objectius = Objectiu.objects.all()
 	metriques = Metrica.objects.all()
 	return render(request, "Objectius/objectius.html", {'objectius': objectius, 'metriques': metriques})
+
+# Lleva un principi del objectiu (AJAX)
+def llevaPrincipi(request, id):
+	if request.method == 'POST':
+		if request.is_ajax():
+			objectiu = Objectiu.objects.get(id=id)
+			principis_a_eliminar = request.POST.getlist('obj[]')[0].split(",")
+			for obj in principis_a_eliminar:
+				objectiu.principis_objectius.remove(Principi.objects.get(id=obj))
+			return JsonResponse({"response" : "Principi eliminat!"})
+
+# Afegeix un principi al objectiu (AJAX)
+def afegeixPrincipi(request, id):
+	if request.method == 'POST':
+		if request.is_ajax():
+			objectiu = Objectiu.objects.get(id=id)
+			principis_a_afegir = request.POST.getlist('obj[]')[0].split(",")
+			for obj in principis_a_afegir:
+				objectiu.principis_objectius.add(Principi.objects.get(id=obj))
+			return JsonResponse({"response" : "Principi creat!"})
+
+# Lleva una metrica del objectiu (AJAX)
+def llevaMetrica(request, id):
+	if request.method == 'POST':
+		if request.is_ajax():
+			objectiu = Objectiu.objects.get(id=id)
+			metriques_a_eliminar = request.POST.getlist('obj[]')[0].split(",")
+			for obj in metriques_a_eliminar:
+				Metrica.objects.get(id=obj).delete()
+			return JsonResponse({"response" : "Principi eliminat!"})
