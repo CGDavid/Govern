@@ -16,7 +16,7 @@ def projectes(request):
 # Mostra el projecte corresponent a la id
 def showProjecte(request, id):
 	projecte = Projecte.objects.get(id=id)
-	evaluacions = Evaluacio.objects.filter(projecte_id=id)
+	evaluacions = Evaluacio.objects.filter(projecte_id=id).order_by('creat')
 	return render(request, 'Projectes/show.html', {'projecte': projecte, 'evaluacions' : evaluacions})
 
 # Si el Request es GET, retorna la view de creació del resource amb el formulari buit.

@@ -131,9 +131,49 @@
             </div>
           </div>
 
+
+          <div class="row">
+            <!-- Gràfic evaluacions -->
+            <div class="col-sm-6">
+              <div class="x_panel">
+                <div class="x_title">
+                  <ul class="nav navbar-right panel_toolbox">
+                    <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                    </li>
+                  </ul>
+                  <h2>Historial d'Evaluacions</h2>
+                  <div class="clearfix"></div>
+                </div>
+                <div class="x_content">        
+                  <p>Desde {{ evaluacions.first.creat }} fins a {{ evaluacions.last.creat }}</p>
+                  <canvas id="lineChart"></canvas>
+                </div>
+              </div>
+            </div>
+         
+            <!-- Gràfic evaluació final -->
+            <div class="col-sm-6">
+              <div class="x_panel">
+                <div class="x_title">
+                  <ul class="nav navbar-right panel_toolbox">
+                    <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                    </li>
+                  </ul>
+                  <h2>Evaluació final</h2>
+                  <div class="clearfix"></div>
+                </div>
+                <div class="x_content">        
+                  <p>{{ evaluacions.last.creat }}</p>
+                  <canvas id="hexaChart"></canvas>
+                </div>
+              </div>
+            </div>
+          </div>
+
+
+          <!-- Evaluacions -->
           <div class="row">
             <div class="col-md-8 col-sm-12">
-              <!-- Evaluacions -->
               <div class="x_panel">
                 <div class="x_title">
                   <ul class="nav navbar-right panel_toolbox">
@@ -328,4 +368,164 @@
     </div>
   </div>
 </div>
+{% endblock %}
+
+{% block scripts %}
+  <script>
+    Chart.defaults.global.legend = {
+      enabled: false
+    };
+
+    var options = {
+      scaleLineColor: "rgba(38, 185, 154, 0)"
+    }
+
+    // Line chart
+    var ctx = document.getElementById("lineChart");
+    var lineChart = new Chart(ctx, {
+      options: options,
+      type: 'line',
+      data: {
+        labels: [{% for evaluacio in evaluacions %} "{{ evaluacio.creat }}", {% endfor %}],
+        datasets: 
+        [{
+          label: "Responsabilitat",
+          backgroundColor: "rgba(235, 191, 58, 0)",
+          borderColor: "rgba(235, 191, 58, 0.7)",
+          pointBorderColor: "rgba(60,102,146, 0.7)",
+          pointBackgroundColor: "rgba(60, 102, 146, 0.7)",
+          pointHoverBackgroundColor: "#fff",
+          pointHoverBorderColor: "rgba(220,220,220,1)",
+          pointBorderWidth: 1,
+          data: [
+          {% for evaluacio in evaluacions %} 
+            {{ evaluacio.puntuacio_responsabilitat }},
+          {% endfor %}
+          ]
+        },
+        {
+          label: "Estrategia",
+          backgroundColor: "rgba(38, 185, 154, 0)",
+          borderColor: "rgba(38, 185, 154, 0.7)",
+          pointBorderColor: "rgba(60,102,146, 0.7)",
+          pointBackgroundColor: "rgba(60, 102, 146, 0.7)",
+          pointHoverBackgroundColor: "#fff",
+          pointHoverBorderColor: "rgba(220,220,220,1)",
+          pointBorderWidth: 1,
+          data: [
+          {% for evaluacio in evaluacions %} 
+            {{ evaluacio.puntuacio_estrategia }},
+          {% endfor %}
+          ]
+        }, 
+        {
+          label: "Adquisició",
+          backgroundColor: "rgba(176, 75, 126, 0)",
+          borderColor: "rgba(176, 75, 126, 0.7)",
+          pointBorderColor: "rgba(60,102,146, 0.7)",
+          pointBackgroundColor: "rgba(60, 102, 146, 0.7)",
+          pointHoverBackgroundColor: "#fff",
+          pointHoverBorderColor: "rgba(220,220,220,1)",
+          pointBorderWidth: 1,
+          data: [
+          {% for evaluacio in evaluacions %} 
+            {{ evaluacio.puntuacio_adquisicio }},
+          {% endfor %}
+          ]
+        },
+        {
+          label: "Rendiment",
+          backgroundColor: "rgba(138, 75, 176, 0)",
+          borderColor: "rgba(138, 75, 176, 0.7)",
+          pointBorderColor: "rgba(60,102,146, 0.7)",
+          pointBackgroundColor: "rgba(60, 102, 146, 0.7)",
+          pointHoverBackgroundColor: "#fff",
+          pointHoverBorderColor: "rgba(220,220,220,1)",
+          pointBorderWidth: 1,
+          data: [
+          {% for evaluacio in evaluacions %} 
+            {{ evaluacio.puntuacio_rendiment }},
+          {% endfor %}
+          ]
+        },
+        {
+          label: "Conformitat",
+          backgroundColor: "rgba(75, 75, 176, 0)",
+          borderColor: "rgba(75, 75, 176, 0.7)",
+          pointBorderColor: "rgba(60,102,146, 0.7)",
+          pointBackgroundColor: "rgba(60, 102, 146, 0.7)",
+          pointHoverBackgroundColor: "#fff",
+          pointHoverBorderColor: "rgba(220,220,220,1)",
+          pointBorderWidth: 1,
+          data: [
+          {% for evaluacio in evaluacions %} 
+            {{ evaluacio.puntuacio_conformitat }},
+          {% endfor %}
+          ]
+        },
+        {
+          label: "Conducta",
+          backgroundColor: "rgba(126, 176, 75, 0)",
+          borderColor: "rgba(126, 176, 75, 0.7)",
+          pointBorderColor: "rgba(60,102,146, 0.7)",
+          pointBackgroundColor: "rgba(60, 102, 146, 0.7)",
+          pointHoverBackgroundColor: "#fff",
+          pointHoverBorderColor: "rgba(220,220,220,1)",
+          pointBorderWidth: 1,
+          data: [
+          {% for evaluacio in evaluacions %} 
+            {{ evaluacio.puntuacio_conducta }},
+          {% endfor %}
+          ]
+        },
+
+        ],
+      }
+    });    
+
+   //then you just need to generate the legend
+    var legend = lineChart.generateLegend();
+
+    //and append it to your page somewhere
+    $('#lineChart').append(legend);
+
+    // Hexa chart
+    var ctx = document.getElementById("hexaChart");
+
+    var options = {
+      scale: {
+          ticks: {
+            min: 0,
+            max: 10
+          }
+      }
+    }
+
+    var data = {
+      labels: ["Responsabilitat", "Estrategia", "Adquisició", "Rendiment", "Conformitat", "Conducta"],
+      datasets: [{
+        label: "Evaluació",
+        backgroundColor: "rgba(3, 88, 106, 0.2)",
+        borderColor: "rgba(3, 88, 106, 0.80)",
+        pointBorderColor: "rgba(3, 88, 106, 0.80)",
+        pointBackgroundColor: "rgba(3, 88, 106, 0.80)",
+        pointHoverBackgroundColor: "#fff",
+        pointHoverBorderColor: "rgba(220,220,220,1)",
+        data: [
+          {{ evaluacions.last.puntuacio_responsabilitat }},
+          {{ evaluacions.last.puntuacio_estrategia }},
+          {{ evaluacions.last.puntuacio_adquisicio }},
+          {{ evaluacions.last.puntuacio_rendiment }},
+          {{ evaluacions.last.puntuacio_conformitat }},
+          {{ evaluacions.last.puntuacio_conducta }},
+        ]
+      }]
+    };
+
+    var hexaChart = new Chart(ctx, {
+      type: 'radar',
+      data: data,
+      options: options
+    });
+  </script>
 {% endblock %}
