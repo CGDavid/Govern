@@ -45,17 +45,17 @@ class Projecte(models.Model):
         
 
 class Metrica(models.Model):
-    UNITATS = (
-        ('EUR','Euros'),
-        ('DIA','Dies'),
-        ('PCT','Percentatge')
-    )
+
+    RANG = [(i,i) for i in range(11)]
+
     nom = models.CharField(max_length=30)
     descripcio = models.TextField()
-    unitat = models.CharField(max_length=11, choices=UNITATS)
+    unitat = models.CharField(max_length=100)
     objectiu = models.ForeignKey(Objectiu, related_name="metriques_objectius")
-    maxim = models.PositiveSmallIntegerField(null=True)
-    minim = models.PositiveSmallIntegerField(null=True)
+    maxim = models.PositiveIntegerField(null=True)
+    minim = models.PositiveIntegerField(null=True)
+    valor = models.PositiveIntegerField(null=True)
+    ponderacio = models.PositiveIntegerField(null=True, choices=RANG)
     
     def __unicode__(self):
         return "%s" % (self.nom)

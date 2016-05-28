@@ -5,6 +5,7 @@ from django.shortcuts import render
 from projects.models import *
 from projects.forms import *
 from django.http import JsonResponse
+from django.db.models import Sum
 
 # Objectius
 
@@ -13,7 +14,31 @@ def objectius(request):
 	projectes = Projecte.objects.all()
 	objectius = Objectiu.objects.all()
 	metriques = Metrica.objects.all()
-	return render(request, 'Objectius/objectius.html', {'objectius': objectius, 'metriques': metriques, 'projectes': projectes})
+	inversions = []
+	colors = []
+
+	# Inversió total de cada objectiu
+	for objectiu in objectius:
+		inversions.append(objectiu.projectes_objectius.aggregate(Sum('presupost')).values()[0])
+
+	# Color final de cada objectiu
+	for objectiu in objectius:
+		metrica = Metrica.objects.filter(objectiu_id=objectiu.id)
+		colors.append(obtenirColor(metrica))
+
+	return render(request, 'Objectius/objectius.html', {'objectius': objectius, 'metriques': metriques, 'projectes': projectes, 'inversions': inversions, 'colors': colors})
+
+# Mostra l'objectiu corresponent a la id
+def showObjectiu(request, id):
+	objectiu = Objectiu.objects.get(id=id)
+	projectes = objectiu.projectes_objectius.all()
+	principis = objectiu.principis_objectius.all()
+	metriques = Metrica.objects.filter(objectiu_id=id)
+
+	# Obtener color del objetivo
+	colorFinal = obtenirColor(metriques)
+
+	return render(request, 'Objectius/show.html', {'objectiu': objectiu, 'principis': principis, 'metriques': metriques, 'colorFinal': colorFinal, 'projectes': projectes})
 
 # Si el Request es GET, retorna la view de creació del resource amb el formulari buit.
 # Si el Request es POST, crea el request amb les dades obtingudes al formulari
@@ -112,3 +137,46 @@ def afegeixProjecte(request, id):
 			for obj in projectes_a_afegir:
 				objectiu.projectes_objectius.add(Projecte.objects.get(id=obj))
 			return JsonResponse({"response" : "Projecte creat!"})
+
+def obtenirColor(metriques):
+	valoresPonderados = []
+	ponderacio_total = 0
+
+	# Total de ponderaciones
+	for metrica in metriques:
+		ponderacio_total += float(metrica.ponderacio)
+
+	# Calculamos qué porcentaje corresponde a cada metrica según su ponderación
+	for metrica in metriques:
+		# Obtenemos ponderación real de esta métrica
+		ponderacio_real = metrica.ponderacio/ponderacio_total
+
+		# Obtener color de metrica (rojo = 1, amarillo = 2, verde = 3)
+		if metrica.valor < metrica.minim:
+			# Rojo
+			valor = 1
+		elif metrica.valor < metrica.maxim:
+			# Amarillo
+			valor = 2
+		elif metrica.valor > metrica.maxim:
+			# Verde
+			valor = 3
+
+		valoresPonderados.append(valor*ponderacio_real)
+
+	# Hacemos la media de los valores ponderados de las métricas
+	valorFinal = 0
+	for valor in valoresPonderados:
+		valorFinal += valor
+
+	# Rojo: 1 - 1,66666
+	# Amarillo: 1,66667 - 2,33333
+	# Azule: 2,33334 - 3
+	if valorFinal <= 1.66666:
+		colorFinal = 'rojo'
+	elif valorFinal <= 2.33333:
+		colorFinal = 'amarillo'
+	elif valorFinal <= 3:
+		colorFinal = 'azul'
+
+	return colorFinal

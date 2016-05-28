@@ -50,17 +50,17 @@
 		              	{% for principi in objectiu.principis_objectius.all %}
 		              		{{ principi.nom }}
 		              		<br>
-            			{% endfor %}
+            				{% endfor %}
 		              </td>
 
 		              <!-- Mètriques -->
 		              <td>
-						{% for metrica in metriques %}
-							{% if metrica.objectiu_id == objectiu.id %}
-            					{{ metrica.nom }}
-            					<br>
-            				{% endif %}
-            			{% endfor %}
+										{% for metrica in metriques %}
+											{% if metrica.objectiu_id == objectiu.id %}
+	            					{{ metrica.nom }}
+	            					<br>
+	            				{% endif %}
+	            			{% endfor %}
 		              </td>
 
 		              <!-- Mètriques -->
@@ -68,12 +68,12 @@
 		              	{% for projecte in objectiu.projectes_objectius.all %}
 		              		{{ projecte.nom }}
 		              		<br>
-            			{% endfor %}
+            				{% endfor %}
 		              </td>
 
 		              <!-- Opcions -->
 		              <td>
-  		                <a href="" class="btn btn-primary btn-xs"><i class="fa fa-folder"></i> Visualitza </a>
+  		                <a href="/objectius/{{ objectiu.id }}" class="btn btn-primary btn-xs"><i class="fa fa-folder"></i> Visualitza </a>
 		                <a href="/objectius/edita/{{ objectiu.id }}" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i> Edita </a>
 		                <a href="/objectius/elimina/{{ objectiu.id }}" class="btn btn-danger btn-xs"><i class="fa fa-trash-o"></i> Esborra </a>
 		              </td>
@@ -86,6 +86,58 @@
 	        <!-- end project list -->
 	      </div>
 	    </div>
+
+	    <div class="x_panel">
+	      <div class="x_title">
+	        <h2>Inversió per objectiu</h2>
+	        <div class="clearfix"></div>
+	      </div>
+
+		    <div class="x_content">
+		    	<div class="row">
+			    	<div class="col-md-offset-3 col-md-6">
+	            <canvas id="mybarChart"></canvas>
+			    	</div>
+		    	</div>
+			  </div>
+			</div>
 	  </div>
 	</div>
+
+	<script type="text/javascript">
+		// Bar chart
+    var ctx = document.getElementById("mybarChart");
+    var mybarChart = new Chart(ctx, {
+      type: 'bar',
+      data: {
+        labels: [{% for objectiu in objectius %} "{{ objectiu.nom }}", {% endfor %}],
+        
+        datasets: [{
+          label: 'Pressupost €',
+          backgroundColor: [
+						{% for color in colors %}
+							{% if color == 'rojo' %}
+								"#d9534f",
+							{% elif color == 'amarillo' %}
+								"#F39C12",
+							{% elif color == 'azul' %}
+								"#3498DB",
+							{% endif %}
+						{% endfor %}
+          ],
+          data: [{% for inversio in inversions %} "{{ inversio }}", {% endfor %}]
+        }]
+      },
+
+      options: {
+        scales: {
+          yAxes: [{
+            ticks: {
+              beginAtZero: true
+            }
+          }]
+        }
+      }
+    });
+	</script>
 {% endblock %}

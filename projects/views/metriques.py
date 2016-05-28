@@ -24,8 +24,10 @@ def crearMetrica(request):
 			unitat = form.cleaned_data['unitat']
 			maxim = form.cleaned_data['vMax']
 			minim = form.cleaned_data['vMin']
+			valor = form.cleaned_data['valor']
+			ponderacio = form.cleaned_data['ponderacio']
 			objectiu_id = request.POST['objectiu']
-			m = Metrica(nom=nom, descripcio=descripcio, maxim=maxim, minim=minim, objectiu_id=objectiu_id, unitat=unitat)
+			m = Metrica(nom=nom, descripcio=descripcio, maxim=maxim, minim=minim, valor=valor, objectiu_id=objectiu_id, unitat=unitat, ponderacio=ponderacio)
 			m.save()
 			metriques = Metrica.objects.all()
 			return render(request, 'Metriques/metriques.html', {'metriques': metriques})
@@ -48,6 +50,8 @@ def editaMetrica(request, id):
 		'unitat': metrica.get('unitat'),
 		'vMin': metrica.get('minim'),
 		'vMax': metrica.get('maxim'),
+		'valor': metrica.get('valor'),
+		'ponderacio': metrica.get('ponderacio'),
 		'metrica_id': id })
 	return render(request, 'Metriques/editar.html', {'form': form})
 
@@ -60,6 +64,8 @@ def updateMetrica(request):
 		unitat = form.cleaned_data['unitat']
 		vMin = form.cleaned_data['vMin']
 		vMax = form.cleaned_data['vMax']
+		valor = form.cleaned_data['valor']
+		ponderacio = form.cleaned_data['ponderacio']
 		metrica_id = form.cleaned_data['metrica_id']
 		
 		metrica = Metrica.objects.filter(id=metrica_id).update(
@@ -67,7 +73,9 @@ def updateMetrica(request):
 			descripcio=descripcio,
 			unitat=unitat,
 			minim=vMin,
-			maxim=vMax
+			maxim=vMax,
+			valor=valor,
+			ponderacio=ponderacio
 			)
 	metriques = Metrica.objects.all()
 	return render(request, "Metriques/metriques.html", {'metriques': metriques})

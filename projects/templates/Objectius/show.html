@@ -1,0 +1,202 @@
+{% extends "Common/base.html" %}
+
+{% block content %}
+
+
+  <div class="" role="main">
+    <div class="">
+
+      <div class="clearfix"></div>
+      <div class="row">
+        <div class="page-title">
+          <div class="title_left">
+            <h3>{{ objectiu.nom }}</h3>
+          </div>
+        </div>
+        <div class="col-xs-12">
+          <div class="x_panel">
+            <div class="x_title">
+              <ul class="nav navbar-right panel_toolbox">
+                <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                </li>
+              </ul>
+              <h2>Informació</h2>
+              <div class="clearfix"></div>
+            </div>
+            <div class="x_content">
+              <div class="row">
+                <!-- Color del objectiu -->
+                <div class="col-md-3">
+                  <ul class="verticle_bars list-inline"  style="text-align:center">
+                    <li>
+                      <h2>Estat</h2>
+                      {% if colorFinal == 'rojo' %}
+                        <div class="progress progress-striped vertical progress_wide bottom">
+                          <div class="progress-bar progress-bar-danger" role="progressbar" data-transitiongoal="25"></div>
+                        </div>
+                      {% elif colorFinal == 'amarillo' %}
+                        <div class="progress progress-striped vertical progress_wide bottom">
+                          <div class="progress-bar progress-bar-warning" role="progressbar" data-transitiongoal="50"></div>
+                        </div>
+                      {% elif colorFinal == 'azul' %}
+                        <div class="progress progress-striped vertical progress_wide bottom">
+                          <div class="progress-bar progress-bar-info" role="progressbar" data-transitiongoal="100"></div>
+                        </div>
+                      {% endif %}
+                    </li>
+                  </ul>
+                </div>
+
+                <!-- Info del objectiu -->
+                <div class="col-md-9">
+                  <!-- Principis -->
+                  <div class="mail_heading row">
+                    <div class="col-md-12">
+                      <h4> Principis </h4>
+                    </div>
+                  </div>
+                  {% for principi in principis %}
+                    <div class="col-md-offset-2 col-md-3 col-sm-4 col-xs-6 tile_stats_count">
+                      <h2>{{ principi.nom }}</h2>
+                    </div>
+                  {% endfor %}
+               
+                  <!-- Descripció -->
+                    <div class="mail_heading row">
+                      <div class="col-md-12">
+                        <h4> Descripció </h4>
+                      </div>
+                    </div>
+                    <div class="view-mail">
+                      <p> {{ objectiu.descripcio }} </p>
+                    </div>
+                    <br>
+                </div>
+              </div>
+            </div>
+            </div>
+
+            <div class="x_panel">
+              <div class="x_title">
+                <ul class="nav navbar-right panel_toolbox">
+                  <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                  </li>
+                </ul>
+                <h2>Mètriques</h2>
+                <div class="clearfix"></div>
+              </div>
+
+              <div class="x_content">
+                <!-- Mètriques -->
+                <div class="row">
+                  {% for metrica in metriques %}
+                  <div class="animated flipInY col-lg-4 col-md-4 col-sm-6 col-xs-12">
+                    <div class="tile-stats">
+                      <!-- Status bar -->
+                      <div class="col-sm-3">
+                        <ul class="verticle_bars list-inline"  style="text-align:center">
+                          <li>
+                            <h2>Estat</h2>
+                            {% if metrica.valor < metrica.minim %}
+                              <div class="progress progress-striped vertical progress_wide bottom">
+                                <div class="progress-bar progress-bar-danger" role="progressbar" data-transitiongoal="25"></div>
+                              </div>
+                            {% elif metrica.valor < metrica.maxim %}
+                              <div class="progress progress-striped vertical progress_wide bottom">
+                                <div class="progress-bar progress-bar-warning" role="progressbar" data-transitiongoal="50"></div>
+                              </div>
+                            {% elif metrica.valor > metrica.maxim %}
+                              <div class="progress progress-striped vertical progress_wide bottom">
+                                <div class="progress-bar progress-bar-info" role="progressbar" data-transitiongoal="100"></div>
+                              </div>
+                            {% endif %}
+                          </li>
+                        </ul>
+                      </div>
+                      <!-- Descripció -->
+                      <div class="col-sm-9">
+                        <div class="count">{{ metrica.nom }}</div>
+                        <h3>Unitat: {{ metrica.unitat }}</h3>
+                        <hr>
+                        <p><span style="color:#BAB8B8">Descripció</span></p>
+                        <p>{{ metrica.descripcio }}</p>
+                        <p><span style="color:#BAB8B8">Criticitat (1/10)</span></p>
+                        <p>{{ metrica.ponderacio }}</p>
+                        <br>
+                      </div>
+                    </div>
+                  </div>
+                  {% endfor %}
+                </div>
+              </div>
+            </div>
+
+            <div class="x_panel">
+              <div class="x_title">
+                <ul class="nav navbar-right panel_toolbox">
+                  <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                  </li>
+                </ul>
+                <h2>Projectes</h2>
+                <div class="clearfix"></div>
+              </div>
+              <div class="x_content">
+                <!-- Projectes -->
+                <div class="row">
+                  <!-- start project list -->
+                  <table class="table table-striped projects">
+                    <thead>
+                      <tr>
+                        <th style="width: 20%">Projecte</th>
+                        <th>Descripció</th>
+                        <th>Pressupost</th>
+                        <th>Tipus</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+
+                      {% for projecte in projectes %}
+
+                        <tr>
+                          <!-- Nom -->
+                          <td>
+                            <a href="/projectes/{{ projecte.id }}">{{ projecte.nom }}</a>
+                          </td>
+
+                          <!-- Descripció -->
+                          <td>
+                            {{ projecte.descripcio }}
+                          </td>
+
+                          <!-- Pressupost -->
+                          <td>
+                            {{ projecte.presupost }} €
+                          </td>
+
+                          <!-- Tipus -->
+                          <td>
+                            {% if projecte.tipus == 'F2P' %}
+                              Free to play
+                            {% elif projecte.tipus == 'CO'%}
+                              Convencional
+                            {% elif projecte.tipus == 'ALT'%}
+                              Altres
+                            {% endif %}
+                          </td>
+                        </tr>
+
+                      {% endfor %}
+
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+
+
+          </div>
+        </div>
+      </div>
+    </div>
+
+{% endblock %}

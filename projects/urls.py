@@ -15,6 +15,7 @@ urlpatterns = [
 
     # Views objectius
     url(r'^objectius$', views.objectius, name='objectius'),
+    url(r'^objectius/(?P<id>[0-9]+)$', views.showObjectiu, name='objectius.mostra'),
     url(r'^objectius/crear$', views.crearObjectiu, name='objectius.crear'),
     url(r'^objectius/elimina/(?P<id>[0-9]+)$', views.eliminaObjectiu, name='objectius.elimina'),
     url(r'^objectius/edita/(?P<id>[0-9]+)$', views.editaObjectiu, name='objectius.edita'),

@@ -114,8 +114,10 @@ class MetricaForm(forms.Form):
 	metrica = forms.CharField(max_length=100)
 	descripcio = forms.CharField(widget=forms.Textarea)
 	unitat = forms.CharField(max_length=100)
-	vMin = forms.IntegerField()
-	vMax = forms.IntegerField()
+	vMin = forms.IntegerField(min_value=0)
+	vMax = forms.IntegerField(min_value=0)
+	valor = forms.IntegerField(min_value=0)
+	ponderacio = forms.IntegerField(min_value=1, max_value=10)
 	objectiu = forms.ModelChoiceField(queryset=Objectiu.objects.all(), empty_label=None)
 
 class MetricaEditForm(forms.Form):
@@ -123,5 +125,7 @@ class MetricaEditForm(forms.Form):
 	metrica = forms.CharField(max_length=100)
 	descripcio = forms.CharField(widget=forms.Textarea)
 	unitat = forms.CharField(max_length=100)
-	vMin = forms.IntegerField()
-	vMax = forms.IntegerField()
+	vMin = forms.IntegerField(min_value=0)
+	vMax = forms.IntegerField(min_value=0)
+	valor = forms.IntegerField(min_value=0)
+	ponderacio = forms.IntegerField(min_value=1, max_value=10)
