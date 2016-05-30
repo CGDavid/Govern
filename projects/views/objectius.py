@@ -5,7 +5,6 @@ from django.shortcuts import render
 from projects.models import *
 from projects.forms import *
 from django.http import JsonResponse
-from django.db.models import Sum
 
 # Objectius
 
@@ -14,19 +13,8 @@ def objectius(request):
 	projectes = Projecte.objects.all()
 	objectius = Objectiu.objects.all()
 	metriques = Metrica.objects.all()
-	inversions = []
-	colors = []
-
-	# Inversió total de cada objectiu
-	for objectiu in objectius:
-		inversions.append(objectiu.projectes_objectius.aggregate(Sum('presupost')).values()[0])
-
-	# Color final de cada objectiu
-	for objectiu in objectius:
-		metrica = Metrica.objects.filter(objectiu_id=objectiu.id)
-		colors.append(obtenirColor(metrica))
-
-	return render(request, 'Objectius/objectius.html', {'objectius': objectius, 'metriques': metriques, 'projectes': projectes, 'inversions': inversions, 'colors': colors})
+	
+	return render(request, 'Objectius/objectius.html', {'objectius': objectius, 'metriques': metriques, 'projectes': projectes})
 
 # Mostra l'objectiu corresponent a la id
 def showObjectiu(request, id):
@@ -139,6 +127,10 @@ def afegeixProjecte(request, id):
 			return JsonResponse({"response" : "Projecte creat!"})
 
 def obtenirColor(metriques):
+	# Si no tiene métricas, no lo pintamos
+	if not metriques:
+		return 'gris'
+
 	valoresPonderados = []
 	ponderacio_total = 0
 

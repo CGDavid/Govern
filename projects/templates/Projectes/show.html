@@ -37,7 +37,7 @@
                         <li>
                           <div class="block">
                             <div class="tags">
-                              <a href="" class="tag">
+                              <a href="/objectius/{{ objectiu.id }}" class="tag">
                                 <span>{{ objectiu.nom }}</span>
                               </a>
                             </div>
@@ -82,7 +82,7 @@
                       <p> {{ projecte.descripcio }} </p>
                     </div>
                     <br>
-                    <!-- top tiles -->
+       
                     <div class="row">
                       <div class="animated flipInY col-lg-4 col-md-4 col-sm-6 col-xs-12">
                         <div class="tile-stats">
@@ -117,10 +117,17 @@
                               Finalitzat
                             {% endif %}
                           </div>
-
                           <h3>Estat</h3>
                         </div>
-                      </div>                   
+                        <br>
+                      </div>
+
+                      <div class="row" style="text-align:center">                             
+                        {% if projecte.estat == 'PE' %}
+                          <a class="btn btn-success btn-xs" href="/projectes/acceptar/{{ projecte.id }}"> Acceptar </a>
+                          <a class="btn btn-danger btn-xs" href="/projectes/rebutjar/{{ projecte.id }}"> Rebutjar </a>
+                        {% endif %}
+                      </div>
                     </div>
                     <!-- /top tiles -->
 
@@ -346,9 +353,6 @@
                           <input type="text" id="comentari_responsabilitat" name="comentari_responsabilitat" required="required" class="form-control col-md-7 col-xs-12">
                         </div>
                       </div>
-
-
-
 
                       <div class="ln_solid"></div>
 

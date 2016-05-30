@@ -74,12 +74,12 @@ WSGI_APPLICATION = 'Govern.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.mysql',
+        'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'govern',
-        'USER': 'djangovern',
-        'PASSWORD': 'atupDmFCqhLWLmBs',
+        'USER': 'postgres',
+        'PASSWORD': 'hidrologia',
         'HOST': 'localhost',
-        'PORT': '3306',
+        'PORT': '5432',
     }
 }
 

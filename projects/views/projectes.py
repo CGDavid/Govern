@@ -154,3 +154,13 @@ def crearEvaluacio(request, id):
 	evaluacio.save()
 
 	return redirect('/projectes/'+id, args={'projecte_id':id})
+
+# Acceptar projecte corresponent a la id
+def acceptaProjecte(request, id):
+	Projecte.objects.filter(id=id).update(estat='PR')
+	return redirect('/projectes/'+id, args={'projecte_id':id})
+
+# Rebutjar projecte corresponent a la id
+def rebutjaProjecte(request, id):
+	Projecte.objects.filter(id=id).update(estat='RE')
+	return redirect('/projectes/'+id, args={'projecte_id':id})
