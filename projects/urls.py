@@ -28,8 +28,9 @@ urlpatterns = [
     url(r'^projectes/elimina/(?P<id>[0-9]+)$', views.eliminaProjecte, name='projectes.elimina'),
     url(r'^projectes/edita/(?P<id>[0-9]+)$', views.editaProjecte, name='projectes.edita'),
     url(r'^projectes/update$', views.updateProjecte, name='projectes.update'),
-    url(r'^projectes/acceptar/(?P<id>[0-9]+)$', views.acceptaProjecte, name='projectes.accepta'),
+    url(r'^projectes/acceptar$', views.acceptaProjecte, name='projectes.accepta'),
     url(r'^projectes/rebutjar/(?P<id>[0-9]+)$', views.rebutjaProjecte, name='projectes.rebutja'),
+    url(r'^projecte/(?P<projecte_id>[0-9]+)/elimina/evaluacio/(?P<evaluacio_id>[0-9]+)$', views.eliminaEvaluacio, name='projectes.eliminaEvaluacio'),
 
     # Views metriques
     url(r'^metriques$', views.metriques, name='metriques'),

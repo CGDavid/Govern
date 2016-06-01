@@ -5,6 +5,7 @@ from django.shortcuts import render, redirect
 from projects.models import *
 from projects.forms import *
 from django.http import JsonResponse
+from django.db.models import Avg
 
 # Projectes
 
@@ -15,9 +16,22 @@ def projectes(request):
 
 # Mostra el projecte corresponent a la id
 def showProjecte(request, id):
+	if Evaluacio.objects.filter(projecte_id=id).exists():
+		nota_estrategia_mitjana = Evaluacio.objects.filter(projecte_id=id).aggregate(Avg('puntuacio_estrategia')).values()[0]
+		nota_adquisicio_mitjana = Evaluacio.objects.filter(projecte_id=id).aggregate(Avg('puntuacio_adquisicio')).values()[0]
+		nota_conformitat_mitjana = Evaluacio.objects.filter(projecte_id=id).aggregate(Avg('puntuacio_conformitat')).values()[0]
+		nota_conducta_mitjana = Evaluacio.objects.filter(projecte_id=id).aggregate(Avg('puntuacio_conducta')).values()[0]
+		nota_responsabilitat_mitjana = Evaluacio.objects.filter(projecte_id=id).aggregate(Avg('puntuacio_responsabilitat')).values()[0]
+		nota_rendiment_mitjana = Evaluacio.objects.filter(projecte_id=id).aggregate(Avg('puntuacio_rendiment')).values()[0]
+		nota_total = nota_estrategia_mitjana+nota_adquisicio_mitjana+nota_conformitat_mitjana+nota_conducta_mitjana+nota_responsabilitat_mitjana+nota_rendiment_mitjana
+		nota_mitjana = nota_total/6
+	else:
+		nota_mitjana = 'N/A'
+		
 	projecte = Projecte.objects.get(id=id)
+	objectius = Objectiu.objects.all()
 	evaluacions = Evaluacio.objects.filter(projecte_id=id).order_by('creat')
-	return render(request, 'Projectes/show.html', {'projecte': projecte, 'evaluacions' : evaluacions})
+	return render(request, 'Projectes/show.html', {'projecte': projecte, 'evaluacions' : evaluacions, 'objectius': objectius, 'nota_mitjana': nota_mitjana})
 
 # Si el Request es GET, retorna la view de creació del resource amb el formulari buit.
 # Si el Request es POST, crea el request amb les dades obtingudes al formulari
@@ -29,22 +43,17 @@ def crearProjecte(request):
 			nom = form.cleaned_data['projecte']
 			descripcio = form.cleaned_data['descripcio']
 			presupost = form.cleaned_data['presupost']
-			estat = form.cleaned_data['estat']
+			estat = 'PE'
 			tipus = form.cleaned_data['tipus']
 			data_inici = str(form.cleaned_data['data_inici'])
 			data_fi = str(form.cleaned_data['data_fi'])
-			objectius = form.cleaned_data['objectius']
 			vMin = form.cleaned_data['vMin']
 			vMax = form.cleaned_data['vMax']
 			p = Projecte(nom=nom, descripcio=descripcio, presupost=presupost, 
 				estat=estat, tipus=tipus, data_inici=data_inici, data_fi=data_fi, 
 				minim=vMin, maxim=vMax)
 			p.save()
-			# Afegim els objectius
-			for objectiu in objectius:
-				p.objectiu.add(objectiu)
-			# Guardam el projecte
-			p.save()
+
 			projectes = Projecte.objects.all()
 			return render(request, 'Projectes/projectes.html', {'projectes': projectes})
 	else:
@@ -89,15 +98,15 @@ def updateProjecte(request):
 		projecte_id = form.cleaned_data['projecte_id']
 		
 		projecte = Projecte.objects.filter(id=projecte_id).update(
-			nom=nom, 
-			descripcio=descripcio, 
-			presupost=presupost, 
-			estat=estat, 
+			nom=nom,
+			descripcio=descripcio,
+			presupost=presupost,
+			estat=estat,
 			tipus=tipus,
-			data_inici=data_inici, 
-			data_fi=data_fi, 
-			maxim=vMin, 
-			minim=vMax, 
+			data_inici=data_inici,
+			data_fi=data_fi,
+			maxim=vMin,
+			minim=vMax,
 			)
 	projectes = Projecte.objects.all()
 	return render(request, "Projectes/projectes.html", {'projectes': projectes})
@@ -156,11 +165,21 @@ def crearEvaluacio(request, id):
 	return redirect('/projectes/'+id, args={'projecte_id':id})
 
 # Acceptar projecte corresponent a la id
-def acceptaProjecte(request, id):
-	Projecte.objects.filter(id=id).update(estat='PR')
-	return redirect('/projectes/'+id, args={'projecte_id':id})
+def acceptaProjecte(request):
+	id_projecte = request.POST['id_projecte']
+	projecte = Projecte.objects.get(id=id_projecte) 
+	objectius = request.POST.getlist('objectius')
+	for objectiu in objectius:
+		projecte.objectiu.add(objectiu)
+	projecte.estat = 'PR'
+	projecte.save()
+	return redirect('/projectes/'+id_projecte, args={'projecte_id':id_projecte})
 
 # Rebutjar projecte corresponent a la id
 def rebutjaProjecte(request, id):
 	Projecte.objects.filter(id=id).update(estat='RE')
 	return redirect('/projectes/'+id, args={'projecte_id':id})
+
+def eliminaEvaluacio(request, projecte_id, evaluacio_id):
+	Evaluacio.objects.filter(id=evaluacio_id).delete()
+	return redirect('/projectes/'+projecte_id, args={'projecte_id':projecte_id})

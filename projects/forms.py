@@ -72,16 +72,13 @@ class ObjectiuEditForm(forms.Form):
 class ProjecteForm(forms.Form):
 	projecte = forms.CharField(max_length=100)
 	descripcio = forms.CharField(widget=forms.Textarea)
-	presupost = forms.IntegerField()
-	estat = forms.ChoiceField(required=False, 
-		widget=forms.Select, choices=ESTAT)
+	presupost = forms.IntegerField(min_value=0)
 	tipus = forms.ChoiceField(required=False, 
 		widget=forms.Select, choices=TIPUS)
 	data_inici = forms.DateField(widget=DateInput())
 	data_fi = forms.DateField(widget=DateInput())
-	objectius = forms.ModelMultipleChoiceField(queryset=Objectiu.objects.all())
-	vMin = forms.IntegerField()
-	vMax = forms.IntegerField()
+	vMin = forms.IntegerField(min_value=0, max_value=10)
+	vMax = forms.IntegerField(min_value=0, max_value=10)
 
 class ProjecteEditForm(forms.Form):
 

@@ -163,12 +163,12 @@ def obtenirColor(metriques):
 
 	# Rojo: 1 - 1,66666
 	# Amarillo: 1,66667 - 2,33333
-	# Azule: 2,33334 - 3
+	# Verde: 2,33334 - 3
 	if valorFinal <= 1.66666:
 		colorFinal = 'rojo'
 	elif valorFinal <= 2.33333:
 		colorFinal = 'amarillo'
 	elif valorFinal <= 3:
-		colorFinal = 'azul'
+		colorFinal = 'verde'
 
 	return colorFinal

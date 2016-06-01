@@ -29,7 +29,8 @@ def index(request):
 		colors.append(obtenirColor(metrica))
     
 	return render(request, "index.html", 
-		{'objectius': objectius,
+		{
+		 'objectius': objectius,
 		 'inversions': inversions,
 		 'colors': colors,
 		 'pressupost_total' : pressupost_total(),
@@ -41,7 +42,7 @@ def index(request):
 
 # retorna el pressupost total de l'empresa
 def pressupost_total():
-	return float(188216)
+	return 188216
 
 # retorna el passiu d'aquest mes (suma dels pressupostos dels projectes que començen aquest mes)
 def passiu_total():
@@ -51,4 +52,4 @@ def passiu_total():
 	start_date = datetime.datetime(year, mes, 1, 0, 0, 0, 0)
 	end_date = datetime.datetime(year, mes, 1, 0, 0, 0, 0)
 
-	return Projecte.objects.filter(data_inici__range=(start_date, end_date)).aggregate(Sum('presupost')).values()[0]
+	return int(Projecte.objects.filter(data_inici__range=(start_date, end_date)).aggregate(Sum('presupost')).values()[0])
