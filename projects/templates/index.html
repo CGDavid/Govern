@@ -1,14 +1,14 @@
 {% extends "Common/base.html" %}
 
 {% block content %}
-	<!-- top tiles -->
+  <!-- top tiles -->
   <div class="row tile_count">
     <div class="animated flipInY col-md-4 col-sm-4 col-xs-4 tile_stats_count">
       <div class="left"></div>
       <div class="right">
         <span class="count_top"><i class="fa fa-university"></i> Patrimoni </span>
         <div class="count green">{{ pressupost_total }} €</div>
-        <span class="count_bottom"><i class="green"><i class="fa fa-sort-asc"></i>4% </i>Des del mes anterior</span>
+        <span class="count_bottom"><i class="green"><i class="fa fa-sort-asc"></i>4% </i>Del mes anterior</span>
       </div>
     </div>
     <div class="animated flipInY col-md-4 col-sm-4 col-xs-4 tile_stats_count">
@@ -16,7 +16,7 @@
       <div class="right">
         <span class="count_top"><i class="fa fa-balance-scale"></i> Passiu </span>
         <div class="count">{{ passiu_total }} € </div>
-        <span class="count_bottom"><i class="green"><i class="fa fa-sort-desc"></i>18% </i> From last Week</span>
+        <span class="count_bottom"><i class="green"><i class="fa fa-sort-desc"></i>18% </i> Del mes anterior</span>
       </div>
     </div>
     <div class="animated flipInY col-md-4 col-sm-4 col-xs-4 tile_stats_count">
@@ -29,6 +29,73 @@
     </div>
   </div>
   <!-- /top tiles -->
+
+  <!-- Alertes -->
+  <div class="x_panel">
+    <div class="x_title">
+      <h2>Alertes</h2>
+      <div class="clearfix"></div>
+    </div>
+
+    <div class="x_content">
+      <div class="row">
+
+            <table class="table table-striped projects">
+              <thead>
+                <tr>
+                  <th style="width: 20%">Alerta</th>
+                  <th>Descripció</th>
+                  <th>Color</th>
+                  <th>Tipus</th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody>
+
+                {% for alerta in alertes %}
+
+                  <tr>
+                    <!-- Nom -->
+                    <td>
+                      <a href="{{ alerta.uri }}">{{ alerta.nom }}</a>
+                    </td>
+
+                    <!-- Descripció -->
+                    <td>
+                      {{ alerta.descripcio }}
+                    </td>
+
+                    <!-- Color -->
+                    <td style="width:30%; padding-right:10%">
+                      {% if alerta.color == 'V' %}
+                        <div class="progress">
+                          <div class="progress-bar progress-bar-success" data-transitiongoal="100"></div>
+                        </div>
+                      {% elif alerta.color == 'A' %}
+                        <div class="progress">
+                          <div class="progress-bar progress-bar-warning" data-transitiongoal="50"></div>
+                        </div>
+                      {% elif alerta.color == 'R' %}
+                        <div class="progress">
+                          <div class="progress-bar progress-bar-danger" data-transitiongoal="25"></div>
+                        </div>
+                      {% endif %}
+                    </td>
+                  
+                    <!-- Tipus -->
+                    <td>
+                      <a class="btn btn-success btn-xs" href="{{alerta.uri}}"></i> Examinar </a>
+                    </td>
+                  </tr>
+
+                {% endfor %}
+
+              </tbody>
+            </table>
+
+          </div>
+    </div>
+  </div>
 
   <!-- Gràfica inversió per objectiu -->
   <div class="x_panel">

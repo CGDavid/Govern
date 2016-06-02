@@ -55,25 +55,32 @@
                       </div>
                     {% else %}
                       <!-- Objectius -->
-                      <ul class="list-unstyled timeline">
-                        {% for objectiu in projecte.objectiu.all %}
-                          <li>
-                            <div class="block">
-                              <div class="tags">
-                                <a href="/objectius/{{ objectiu.id }}" class="tag">
-                                  <span>{{ objectiu.nom }}</span>
-                                </a>
+                      {% if not projecte.objectiu.all %}
+                        <div class="alert alert-danger" style="text-align: center;">
+                            <h5 style="color:white">No té cap objectiu associat!</h5><br>
+                            <a href="/projectes/edita/{{projecte.id}}" class="btn btn-info">Afegir</a>
+                        </div>
+                      {% else %}
+                        <ul class="list-unstyled timeline">
+                          {% for objectiu in projecte.objectiu.all %}
+                            <li>
+                              <div class="block">
+                                <div class="tags">
+                                  <a href="/objectius/{{ objectiu.id }}" class="tag">
+                                    <span>{{ objectiu.nom }}</span>
+                                  </a>
+                                </div>
+                                <div class="block_content">
+                                  <!-- Descripció -->
+                                  <p class="excerpt">
+                                    {{ objectiu.descripcio }}
+                                  </p>
+                                </div>
                               </div>
-                              <div class="block_content">
-                                <!-- Descripció -->
-                                <p class="excerpt">
-                                  {{ objectiu.descripcio }}
-                                </p>
-                              </div>
-                            </div>
-                          </li>
-                        {% endfor %} 
-                      </ul>
+                            </li>
+                          {% endfor %} 
+                        </ul>
+                      {% endif %}
                     {% endif %}
                   </div>
                 </div>

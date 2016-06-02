@@ -29,6 +29,8 @@ def crearMetrica(request):
 			objectiu_id = request.POST['objectiu']
 			m = Metrica(nom=nom, descripcio=descripcio, maxim=maxim, minim=minim, valor=valor, objectiu_id=objectiu_id, unitat=unitat, ponderacio=ponderacio)
 			m.save()
+			metrica_id = m.id
+			alertaMetrica(metrica_id)
 			metriques = Metrica.objects.all()
 			return render(request, 'Metriques/metriques.html', {'metriques': metriques})
 	else:
@@ -36,6 +38,7 @@ def crearMetrica(request):
 	return render(request, 'Metriques/crear.html', {'form': form})
 
 def eliminaMetrica(request, id):
+	eliminaAlertaMetrica(id)
 	metrica = Metrica.objects.filter(id=id)
 	metrica.delete()
 	metriques = Metrica.objects.all()
@@ -78,4 +81,45 @@ def updateMetrica(request):
 			ponderacio=ponderacio
 			)
 	metriques = Metrica.objects.all()
+	alertaMetrica(metrica_id)
 	return render(request, "Metriques/metriques.html", {'metriques': metriques})
+
+# Cream una alerta de la mètrica que correspon a la id
+def alertaMetrica(id_metrica):
+	metrica = Metrica.objects.get(id=id_metrica)
+	metrica_nom = metrica.nom
+
+	if metrica.valor < metrica.minim:
+		color = 'R'
+		descripcio = 'La metrica '+metrica_nom+' esta per sota del valor minim'
+	elif metrica.valor < metrica.maxim:
+		color = 'A'
+		descripcio = 'La metrica '+metrica_nom+' esta entre valor minim i el maxim'
+	elif metrica.valor >= metrica.maxim:
+		color = 'V'
+		descripcio = 'La metrica '+metrica_nom+' esta sobre el valor maxim'
+
+	# Comprovam si existeix ja una alerta
+	if metrica.alerta_metrica.all().exists():
+		# Actualitzam l'alerta
+		alerta = metrica.alerta_metrica.filter(tipus='ME').update(
+				color = color,
+				descripcio = descripcio
+			)
+	else:
+		# Cream l'alerta
+		alerta = Alerta(
+					nom='Alerta metrica '+metrica_nom,
+					descripcio=descripcio,
+					uri='/metriques/edita/'+str(id_metrica),
+					tipus='ME',
+					color=color,
+				)
+		alerta.save()
+		metrica.alerta_metrica.add(alerta)
+
+# elimina una alerta d'una metrica que hem esborrat
+def eliminaAlertaMetrica(id_metrica):
+	metrica = Metrica.objects.get(id=id_metrica)
+	for alerta in metrica.alerta_metrica.all():
+		alerta.delete()

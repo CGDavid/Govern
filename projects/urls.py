@@ -23,7 +23,7 @@ urlpatterns = [
 
     # Views projectes
     url(r'^projectes$', views.projectes, name='projectes'),
-    url(r'^projectes/(?P<id>[0-9]+)$', views.showProjecte, name='projectes.mostra'),
+    url(r'^projectes/(?P<projecte_id>[0-9]+)$', views.showProjecte, name='projectes.mostra'),
     url(r'^projectes/crear$', views.crearProjecte, name='projectes.crear'),
     url(r'^projectes/elimina/(?P<id>[0-9]+)$', views.eliminaProjecte, name='projectes.elimina'),
     url(r'^projectes/edita/(?P<id>[0-9]+)$', views.editaProjecte, name='projectes.edita'),

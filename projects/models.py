@@ -27,6 +27,7 @@ class Projecte(models.Model):
         ('CO','Convencional'),
         ('ALT','Altres'),
     )
+
     nom = models.CharField(max_length=30)
     descripcio = models.TextField()
     presupost = models.FloatField()
@@ -37,7 +38,6 @@ class Projecte(models.Model):
     modificat = models.DateTimeField(auto_now=True, null=True)
     data_inici = models.DateTimeField(null=True)
     data_fi = models.DateTimeField(null=True)
-    maxim = models.PositiveSmallIntegerField(null=True)
     minim = models.PositiveSmallIntegerField(null=True)
     
     def __unicode__(self):
@@ -64,6 +64,32 @@ class Metrica(models.Model):
 class Principi(models.Model):
     nom = models.CharField(max_length=30)
     objectiu = models.ManyToManyField(Objectiu, related_name="principis_objectius")
+    
+    def __unicode__(self):
+        return "%s" % (self.nom)
+
+
+class Alerta(models.Model):
+
+    TIPUS = (
+        ('ME', 'Mètrica'),
+        ('OB', 'Objectiu'),
+        ('EV', 'Evaluació'),
+    )
+
+    COLOR = (
+        ('R', 'rojo'),
+        ('A', 'amarillo'),
+        ('V', 'verde'),
+    )
+
+    projecte = models.ManyToManyField(Projecte, related_name="alerta_projecte")
+    metrica = models.ManyToManyField(Metrica, related_name="alerta_metrica")
+    descripcio = models.TextField()
+    nom = models.CharField(max_length=30)
+    uri = models.CharField(max_length=30)
+    tipus = models.CharField(max_length=2, choices=TIPUS)
+    color = models.CharField(max_length=1, choices=COLOR)
     
     def __unicode__(self):
         return "%s" % (self.nom)
@@ -105,4 +131,3 @@ class Evaluacio(models.Model):
         
     def __unicode__(self):
         return "Evaluació del projecte %s: %s. modificat el %s" % (self.projecte, self.mitjana, self.modificat)
-

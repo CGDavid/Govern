@@ -78,7 +78,6 @@ class ProjecteForm(forms.Form):
 	data_inici = forms.DateField(widget=DateInput())
 	data_fi = forms.DateField(widget=DateInput())
 	vMin = forms.IntegerField(min_value=0, max_value=10)
-	vMax = forms.IntegerField(min_value=0, max_value=10)
 
 class ProjecteEditForm(forms.Form):
 
@@ -105,7 +104,6 @@ class ProjecteEditForm(forms.Form):
 		self.fields['data_inici'] = forms.DateField(widget=DateInput())
 		self.fields['data_fi'] = forms.DateField(widget=DateInput())
 		self.fields['vMin'] = forms.IntegerField()
-		self.fields['vMax'] = forms.IntegerField()
 
 class MetricaForm(forms.Form):
 	metrica = forms.CharField(max_length=100)

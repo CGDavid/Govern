@@ -15,22 +15,11 @@ def projectes(request):
 	return render(request, 'Projectes/projectes.html', {'projectes': projectes})
 
 # Mostra el projecte corresponent a la id
-def showProjecte(request, id):
-	if Evaluacio.objects.filter(projecte_id=id).exists():
-		nota_estrategia_mitjana = Evaluacio.objects.filter(projecte_id=id).aggregate(Avg('puntuacio_estrategia')).values()[0]
-		nota_adquisicio_mitjana = Evaluacio.objects.filter(projecte_id=id).aggregate(Avg('puntuacio_adquisicio')).values()[0]
-		nota_conformitat_mitjana = Evaluacio.objects.filter(projecte_id=id).aggregate(Avg('puntuacio_conformitat')).values()[0]
-		nota_conducta_mitjana = Evaluacio.objects.filter(projecte_id=id).aggregate(Avg('puntuacio_conducta')).values()[0]
-		nota_responsabilitat_mitjana = Evaluacio.objects.filter(projecte_id=id).aggregate(Avg('puntuacio_responsabilitat')).values()[0]
-		nota_rendiment_mitjana = Evaluacio.objects.filter(projecte_id=id).aggregate(Avg('puntuacio_rendiment')).values()[0]
-		nota_total = nota_estrategia_mitjana+nota_adquisicio_mitjana+nota_conformitat_mitjana+nota_conducta_mitjana+nota_responsabilitat_mitjana+nota_rendiment_mitjana
-		nota_mitjana = nota_total/6
-	else:
-		nota_mitjana = 'N/A'
-		
-	projecte = Projecte.objects.get(id=id)
+def showProjecte(request, projecte_id):
+	nota_mitjana = mitjanaEvaluacio(projecte_id)
+	projecte = Projecte.objects.get(id=projecte_id)
 	objectius = Objectiu.objects.all()
-	evaluacions = Evaluacio.objects.filter(projecte_id=id).order_by('creat')
+	evaluacions = Evaluacio.objects.filter(projecte_id=projecte_id).order_by('creat')
 	return render(request, 'Projectes/show.html', {'projecte': projecte, 'evaluacions' : evaluacions, 'objectius': objectius, 'nota_mitjana': nota_mitjana})
 
 # Si el Request es GET, retorna la view de creació del resource amb el formulari buit.
@@ -48,10 +37,9 @@ def crearProjecte(request):
 			data_inici = str(form.cleaned_data['data_inici'])
 			data_fi = str(form.cleaned_data['data_fi'])
 			vMin = form.cleaned_data['vMin']
-			vMax = form.cleaned_data['vMax']
 			p = Projecte(nom=nom, descripcio=descripcio, presupost=presupost, 
 				estat=estat, tipus=tipus, data_inici=data_inici, data_fi=data_fi, 
-				minim=vMin, maxim=vMax)
+				minim=vMin)
 			p.save()
 
 			projectes = Projecte.objects.all()
@@ -61,6 +49,7 @@ def crearProjecte(request):
 	return render(request, 'Projectes/crear.html', {'form': form})
 
 def eliminaProjecte(request, id):
+	eliminaAlertaProjecte(id)
 	projecte = Projecte.objects.filter(id=id)
 	projecte.delete()
 	projectes = Projecte.objects.all()
@@ -78,7 +67,6 @@ def editaProjecte(request, id):
 		'data_inici': projecte.get('data_inici'), 
 		'data_fi': projecte.get('data_fi'), 
 		'vMin': projecte.get('minim'), 
-		'vMax': projecte.get('maxim'),
 		'projecte_id': id }, projecte_id=id)
 	return render(request, 'Projectes/editar.html', {'form': form, 'projecte_id': id})
 
@@ -94,7 +82,6 @@ def updateProjecte(request):
 		data_inici = str(form.cleaned_data['data_inici'])
 		data_fi = str(form.cleaned_data['data_fi'])
 		vMin = form.cleaned_data['vMin']
-		vMax = form.cleaned_data['vMax']
 		projecte_id = form.cleaned_data['projecte_id']
 		
 		projecte = Projecte.objects.filter(id=projecte_id).update(
@@ -105,9 +92,11 @@ def updateProjecte(request):
 			tipus=tipus,
 			data_inici=data_inici,
 			data_fi=data_fi,
-			maxim=vMin,
-			minim=vMax,
+			minim=vMin,
 			)
+
+		#Comprovam si s'han modificat els objectius per afegir o eliminar una alerta
+		checkAlertaObjectius(projecte_id)
 	projectes = Projecte.objects.all()
 	return render(request, "Projectes/projectes.html", {'projectes': projectes})
 
@@ -162,15 +151,31 @@ def crearEvaluacio(request, id):
 		)
 	evaluacio.save()
 
+	# Check per comprovar si la mitjana d'evaluacions es major o menor que el minim (si es menor cream alerta)
+	alertaEvaluacio(id)
+
 	return redirect('/projectes/'+id, args={'projecte_id':id})
+
+# Elimina la evaluació corresponent a evaluacio_id
+def eliminaEvaluacio(request, projecte_id, evaluacio_id):
+	Evaluacio.objects.filter(id=evaluacio_id).delete()
+
+	# Check per comprovar si la mitjana d'evaluacions es major o menor que el minim (si es menor cream alerta)
+	checkAlertaEvaluacio(id)
+
+	return redirect('/projectes/'+projecte_id, args={'projecte_id':projecte_id})
 
 # Acceptar projecte corresponent a la id
 def acceptaProjecte(request):
 	id_projecte = request.POST['id_projecte']
 	projecte = Projecte.objects.get(id=id_projecte) 
 	objectius = request.POST.getlist('objectius')
-	for objectiu in objectius:
-		projecte.objectiu.add(objectiu)
+	# Si no hi ha objectius cream una alerta
+	if not objectius:
+		alertaObjectius(id_projecte)
+	else:
+		for objectiu in objectius:
+			projecte.objectiu.add(objectiu)
 	projecte.estat = 'PR'
 	projecte.save()
 	return redirect('/projectes/'+id_projecte, args={'projecte_id':id_projecte})
@@ -180,6 +185,69 @@ def rebutjaProjecte(request, id):
 	Projecte.objects.filter(id=id).update(estat='RE')
 	return redirect('/projectes/'+id, args={'projecte_id':id})
 
-def eliminaEvaluacio(request, projecte_id, evaluacio_id):
-	Evaluacio.objects.filter(id=evaluacio_id).delete()
-	return redirect('/projectes/'+projecte_id, args={'projecte_id':projecte_id})
+
+# Genera una alerta quan un projecte no està alineat amb cap objectiu
+def alertaObjectius(id_projecte):
+	projecte = Projecte.objects.get(id=id_projecte)
+	nomProjecte = projecte.nom
+	alerta = Alerta(
+			nom='Alerta projecte '+nomProjecte,
+			uri='/projectes/'+id_projecte,
+			tipus='OB',
+			color='R',
+			descripcio='El projecte '+nomProjecte+' no te cap objectiu associat'
+		)
+	alerta.save()
+	alerta.projecte.add(projecte)
+
+# Checkeam si s'ha d'eliminar o crear una alerta nova degut a un update
+def checkAlertaObjectius(projecte_id):
+	projecte = Projecte.objects.get(id=projecte_id)
+	if not projecte.objectiu.all():
+		alertaObjectius(projecte_id)
+	else:
+		for alerta in projecte.alerta_projecte.filter(tipus='OB'):
+			alerta.delete()
+
+# Treu la nota mitjana de totes les notes de totes les evaluacions
+def mitjanaEvaluacio(projecte_id):
+	if Evaluacio.objects.filter(projecte_id=projecte_id).exists():
+		evaluacio = Evaluacio.objects.filter(projecte_id=projecte_id).order_by('creat').last()
+		nota_estrategia = evaluacio.puntuacio_estrategia
+		nota_adquisicio = evaluacio.puntuacio_adquisicio
+		nota_conformitat = evaluacio.puntuacio_conformitat
+		nota_conducta = evaluacio.puntuacio_conducta
+		nota_responsabilitat = evaluacio.puntuacio_responsabilitat
+		nota_rendiment = evaluacio.puntuacio_rendiment
+		nota_total = float(nota_estrategia+nota_adquisicio+nota_conformitat+nota_conducta+nota_responsabilitat+nota_rendiment)
+		nota_mitjana = nota_total/6
+	else:
+		nota_mitjana = 'N/A'
+	return nota_mitjana
+
+# Cream una alerta d'un projecte quan la seva evaluació està sota vMin
+def alertaEvaluacio(id_projecte):
+	mitjana = mitjanaEvaluacio(id_projecte)
+	projecte = Projecte.objects.get(id=id_projecte)
+	nomProjecte = projecte.nom
+	if mitjana != 'N/A':
+		if mitjana < projecte.minim:
+			if not projecte.alerta_projecte.filter(tipus='EV'):
+				alerta = Alerta(
+					nom='Alerta projecte '+nomProjecte,
+					uri='/projectes/'+id_projecte,
+					tipus='EV',
+					color='R',
+					descripcio='El projecte '+nomProjecte+' te una valoracio per sota la valoracio minima'
+				)
+				alerta.save()
+				projecte.alerta_projecte.add(alerta)
+		else:
+			for alerta in projecte.alerta_projecte.filter(tipus='EV'):
+				alerta.delete()
+
+# Elimina les alertes d'un projecte esborrat
+def eliminaAlertaProjecte(id_projecte):
+	projecte = Projecte.objects.get(id=id_projecte)
+	for alerta in projecte.alerta_projecte.all():
+		alerta.delete()
