@@ -36,64 +36,75 @@
       <h2>Alertes</h2>
       <div class="clearfix"></div>
     </div>
-
     <div class="x_content">
       <div class="row">
+        <table class="table table-striped projects">
+          <thead>
+            <tr>
+              <th style="width: 20%">Alerta</th>
+              <th>Descripció</th>
+              <th>Color</th>
+              <th>Tipus</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
 
-            <table class="table table-striped projects">
-              <thead>
-                <tr>
-                  <th style="width: 20%">Alerta</th>
-                  <th>Descripció</th>
-                  <th>Color</th>
-                  <th>Tipus</th>
-                  <th></th>
-                </tr>
-              </thead>
-              <tbody>
+            {% for alerta in alertes %}
 
-                {% for alerta in alertes %}
+              <tr>
+                <!-- Nom -->
+                <td>
+                  <a href="{{ alerta.uri }}">{{ alerta.nom }}</a>
+                </td>
 
-                  <tr>
-                    <!-- Nom -->
-                    <td>
-                      <a href="{{ alerta.uri }}">{{ alerta.nom }}</a>
-                    </td>
+                <!-- Descripció -->
+                <td>
+                  {{ alerta.descripcio }}
+                </td>
 
-                    <!-- Descripció -->
-                    <td>
-                      {{ alerta.descripcio }}
-                    </td>
+                <!-- Color -->
+                <td style="width:30%; padding-right:10%">
+                  {% if alerta.color == 'V' %}
+                    <div class="progress">
+                      <div class="progress-bar progress-bar-success" data-transitiongoal="100"></div>
+                    </div>
+                  {% elif alerta.color == 'A' %}
+                    <div class="progress">
+                      <div class="progress-bar progress-bar-warning" data-transitiongoal="50"></div>
+                    </div>
+                  {% elif alerta.color == 'R' %}
+                    <div class="progress">
+                      <div class="progress-bar progress-bar-danger" data-transitiongoal="25"></div>
+                    </div>
+                  {% endif %}
+                </td>
+              
+                <!-- Tipus -->
+                <td>
+                  <a class="btn btn-success btn-xs" href="{{alerta.uri}}"></i> Examinar </a>
+                </td>
+              </tr>
 
-                    <!-- Color -->
-                    <td style="width:30%; padding-right:10%">
-                      {% if alerta.color == 'V' %}
-                        <div class="progress">
-                          <div class="progress-bar progress-bar-success" data-transitiongoal="100"></div>
-                        </div>
-                      {% elif alerta.color == 'A' %}
-                        <div class="progress">
-                          <div class="progress-bar progress-bar-warning" data-transitiongoal="50"></div>
-                        </div>
-                      {% elif alerta.color == 'R' %}
-                        <div class="progress">
-                          <div class="progress-bar progress-bar-danger" data-transitiongoal="25"></div>
-                        </div>
-                      {% endif %}
-                    </td>
-                  
-                    <!-- Tipus -->
-                    <td>
-                      <a class="btn btn-success btn-xs" href="{{alerta.uri}}"></i> Examinar </a>
-                    </td>
-                  </tr>
+            {% endfor %}
 
-                {% endfor %}
-
-              </tbody>
-            </table>
-
+          </tbody>
+        </table>
+        <form action="/" method="post">
+          {% csrf_token %}
+          <div class="row">
+            <select class="col-md-3 col-md-offset-3" name="filtre">
+              <option value="vermell">Color vermell</option>
+              <option value="groc">Color groc </option>
+              <option value="verd">Color verd </option>
+              <option value="eval">Evaluació</option>
+              <option value="metr">Mètrica</option>
+              <option value="obje">Objectius</option>
+            </select>
+            <button class="col-md-1 btn btn-info" style="height:30px; margin-left:5%;">Filtrar</button>
           </div>
+        </form>
+      </div>
     </div>
   </div>
 

@@ -11,13 +11,17 @@ import datetime, calendar
 # Retorna la view del index de la aplicació
 def index(request):
 	objectius = Objectiu.objects.all()
-	alertes = Alerta.objects.all()
 	projectes_pendents = Projecte.objects.filter(estat='PE')
 	projectes_en_curs = Projecte.objects.filter(estat='PR')
 	nombre_projectes_en_curs = Projecte.objects.filter(estat='PR').count()
 	inversions = []
 	colors = []
 	metriques = Metrica.objects.all()
+	filtre_select = request.POST.get('filtre')
+	if filtre_select:
+		alertes = filtre(filtre_select)
+	else:
+		alertes = Alerta.objects.all()
 
 	# Inversió total de cada objectiu
 	for objectiu in objectius:
@@ -59,3 +63,17 @@ def passiu_total():
 		return int(passiu_total)
 	else:
 		return "0"
+
+def filtre(filtre):
+	if filtre == "vermell":
+		return Alerta.objects.filter(color='R')			
+	if filtre == "groc":
+		return Alerta.objects.filter(color='A')	
+	if filtre == "verd":
+		return Alerta.objects.filter(color='V')
+	if filtre == "eval":
+		return Alerta.objects.filter(tipus='EV')
+	if filtre == "metr":
+		return Alerta.objects.filter(tipus='ME')	
+	if filtre == "obje":
+		return Alerta.objects.filter(tipus='OB')
