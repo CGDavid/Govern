@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from django.http import HttpResponse, HttpResponseRedirect
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 
 from projects.models import *
 from projects.forms import *
@@ -53,15 +53,20 @@ def crearObjectiu(request):
 
 # Elimina un objectiu corresponent a la id del argument
 def eliminaObjectiu(request, id):
-	objectiu = Objectiu.objects.filter(id=id)
-	objectiu.delete()
 	objectius = Objectiu.objects.all()
+	objectiu = Objectiu.objects.get(id=id)
+	if objectiu.projectes_objectius.all():
+		return render(request, 'Objectius/objectius.html', {'objectius':objectius, 'error_msg': 'No se pot esborrar un objectiu que té projectes associats'})
+	objectiu.delete()
 	return render(request, "Objectius/objectius.html", {'objectius': objectius})
 
 # Edita un objectiu corresponent a la id del argument
 def editaObjectiu(request, id):
-	objectiu = Objectiu.objects.filter(id=id).values()[0]
-	form = ObjectiuEditForm(initial={'objectiu': objectiu.get('nom'), 'descripcio': objectiu.get('descripcio'), 'objectiu_id':id }, objectiu_id=id)
+	objectius = Objectiu.objects.all()
+	objectiu = Objectiu.objects.get(id=id)
+	if objectiu.projectes_objectius.all():
+		return render(request, 'Objectius/objectius.html', {'objectius':objectius, 'error_msg': 'No se pot modificar un objectiu que té projectes associats'})
+	form = ObjectiuEditForm(initial={'objectiu': objectiu.nom , 'descripcio': objectiu.descripcio, 'objectiu_id':id }, objectiu_id=id)
 	return render(request, 'Objectius/editar.html', {'form': form, 'objectiu_id': id})
 
 # Actualitza les dades d'un objectiu

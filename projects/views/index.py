@@ -8,6 +8,10 @@ from django.db.models import Sum
 from .objectius import obtenirColor
 import datetime, calendar
 
+# retorna el pressupost total de l'empresa
+def pressupost_total():
+	return 188216
+
 # Retorna la view del index de la aplicació
 def index(request):
 	objectius = Objectiu.objects.all()
@@ -45,11 +49,7 @@ def index(request):
 		 'projectes_en_curs':projectes_en_curs,
 		 'alertes': alertes,
 		 'metriques': metriques
-		 })
-
-# retorna el pressupost total de l'empresa
-def pressupost_total():
-	return 188216
+		})
 
 # retorna el passiu d'aquest mes (suma dels pressupostos dels projectes que començen aquest mes)
 def passiu_total():

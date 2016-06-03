@@ -10,7 +10,11 @@
 	      </div>
 
 	      <div class="x_content">
-
+	      	{% if error_msg %}
+		      	<div class="alert alert-danger" style="text-align: center;">
+	            <h5 style="color:white">{{ error_msg }}</h5><br>
+		        </div>
+		      {% endif %}
 	        <p>Llistat d'objectius de l'organització</p>
 
 	        <table class="table table-striped projects">

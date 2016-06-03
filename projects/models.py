@@ -7,7 +7,7 @@ from django.utils import timezone
 
 
 class Objectiu(models.Model):
-    nom = models.CharField(max_length=30)
+    nom = models.CharField(max_length=100)
     descripcio = models.TextField()
     
     def __unicode__(self):
@@ -28,7 +28,7 @@ class Projecte(models.Model):
         ('ALT','Altres'),
     )
 
-    nom = models.CharField(max_length=30)
+    nom = models.CharField(max_length=100)
     descripcio = models.TextField()
     presupost = models.FloatField()
     estat = models.CharField(max_length=2, choices=STATES)
@@ -48,7 +48,7 @@ class Metrica(models.Model):
 
     RANG = [(i,i) for i in range(11)]
 
-    nom = models.CharField(max_length=30)
+    nom = models.CharField(max_length=100)
     descripcio = models.TextField()
     unitat = models.CharField(max_length=100)
     objectiu = models.ForeignKey(Objectiu, related_name="metriques_objectius")
@@ -62,7 +62,7 @@ class Metrica(models.Model):
 
 
 class Principi(models.Model):
-    nom = models.CharField(max_length=30)
+    nom = models.CharField(max_length=100)
     objectiu = models.ManyToManyField(Objectiu, related_name="principis_objectius")
     
     def __unicode__(self):
@@ -86,8 +86,8 @@ class Alerta(models.Model):
     projecte = models.ManyToManyField(Projecte, related_name="alerta_projecte")
     metrica = models.ManyToManyField(Metrica, related_name="alerta_metrica")
     descripcio = models.TextField()
-    nom = models.CharField(max_length=30)
-    uri = models.CharField(max_length=30)
+    nom = models.CharField(max_length=100)
+    uri = models.CharField(max_length=100)
     tipus = models.CharField(max_length=2, choices=TIPUS)
     color = models.CharField(max_length=1, choices=COLOR)
     

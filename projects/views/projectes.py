@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render, redirect
-
 from projects.models import *
 from projects.forms import *
 from django.http import JsonResponse
